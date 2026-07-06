@@ -1,0 +1,204 @@
+@use "../foundation/functions" as *;
+
+/* skins/skin-yuki — 雪・静けさ・上品
+ * Cattery しろゆき（仮）／ スコティッシュフォールド／ オーナー: 50代女性・丁寧で控えめ
+ *
+ * 推奨プリセット: yuki × hero:minimal × klist:rows × hstyle:bottom × motion:soft
+ * 世界観: 白×ブルーグレー×細明朝×かっちり4px×線の世界
+ * 構造(HTML・契約クラス)には触れていない。装飾はトークン＋疑似要素のみ。
+ */
+
+/* ══ 1. トークン再定義（土台） ══ */
+
+:root {
+	/* 色 — 青みがかった白と、くすんだブルーグレー */
+	--color-bg:           #F8FAFB;
+	--color-surface:      #FFFFFF;
+	--color-surface-2:    #EEF2F5;
+	--color-ink:          #2E3A42;
+	--color-ink-sub:      #64747F;
+	--color-primary:      #5A7386; /* ボタン・強調（白文字とのコントラスト 4.8:1） */
+	--color-primary-ink:  #FFFFFF;
+	--color-accent:       #9DB4C6; /* 氷色。罫線的な装飾専用（文字には使わない） */
+	--color-line:         rgba(46, 58, 66, 0.12);
+
+	--color-status-open:  #5A7386;
+	--color-status-talk:  #8A6A38;
+	--color-status-done:  #6B757D;
+
+	/* 書体 — 細めの明朝 */
+	--font-heading: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
+	--font-body:    "Noto Sans JP", sans-serif;
+	--font-note:    "Noto Sans JP", sans-serif;
+
+	/* 形 — かっちり・線の世界 */
+	--radius-xs: 3px;
+	--radius-s:  4px;
+	--radius-m:  6px;
+	--radius-l:  10px;
+	--radius-btn: 2px;
+	--shadow-card: none;
+	--border-card: 1px solid var(--color-line);
+
+	/* 寸法 — 余白を広く、静けさをつくる */
+	--container:   1080px;
+	--section-pad: clamp(80px, 11vw, 144px);
+}
+
+/* ══ 2. あしらい（トークンでは表現できない装飾のみ） ══ */
+
+/* 雪 — ごく微かな粉雪のドットを全面に敷く */
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-image: radial-gradient(rgba(122, 147, 168, 0.06) 1px, transparent 1.3px);
+	background-size: 28px 28px;
+}
+
+/* ヘッダー — 白の薄膜。サイト名は広い字間で静かに */
+.p-header {
+	background: rgba(255, 255, 255, 0.88);
+	backdrop-filter: blur(8px);
+}
+
+.p-header__sitename {
+	font-weight: 500;
+	font-size: rem(17);
+	letter-spacing: 0.24em;
+}
+
+/* ヒーロー — 小見出しの上に一本の細い縦線を垂らす */
+.p-hero__eyebrow {
+	letter-spacing: 0.32em;
+}
+
+.p-hero__eyebrow::before {
+	content: "";
+	display: block;
+	width: 1px;
+	height: rem(40);
+	background: var(--color-accent);
+	margin: 0 auto rem(24);
+}
+
+.p-hero--minimal .p-hero__eyebrow::before {
+	margin-inline: auto;
+}
+
+.p-hero--split .p-hero__eyebrow::before,
+.p-hero--photo .p-hero__eyebrow::before {
+	margin-inline: 0;
+}
+
+.p-hero__title {
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	line-height: 1.9;
+}
+
+.p-hero__divider {
+	width: rem(64);
+	background: var(--color-accent);
+	opacity: 1;
+}
+
+.p-hero__text {
+	line-height: 2.6;
+	letter-spacing: 0.06em;
+}
+
+/* 見出し — 英字ラベルの字間を空け、氷色に */
+.c-heading__label {
+	letter-spacing: 0.34em;
+	font-weight: 500;
+	color: var(--color-ink-sub);
+}
+
+.c-heading__title {
+	font-weight: 500;
+	letter-spacing: 0.12em;
+}
+
+/* hstyle-bottom の下線を「雪の上の細い足あと」風に細く */
+.hstyle-bottom .p-kitten-detail__section-title::after,
+.hstyle-bottom .p-page__legal-title::after,
+.hstyle-bottom .p-page__content h2::after {
+	height: 1px;
+	background: var(--color-primary);
+}
+
+/* ボタン — 鋭い角、細い枠、静かなホバー */
+.c-btn {
+	font-weight: 500;
+	letter-spacing: 0.14em;
+}
+
+.c-btn--ghost {
+	border-width: 1px;
+}
+
+.c-btn--primary:hover,
+.c-btn--ghost:hover {
+	transform: none;
+	opacity: 0.75;
+}
+
+/* 子猫カード — 線の世界。ホバーは持ち上げず、枠が氷色に灯る */
+.p-kitten-card {
+	transition: border-color 0.3s ease;
+}
+
+.p-kitten-card:hover {
+	transform: none;
+	border-color: var(--color-accent);
+}
+
+.p-kitten-card__breed {
+	letter-spacing: 0.2em;
+	font-weight: 500;
+}
+
+.p-kitten-card__name {
+	font-family: var(--font-heading);
+	font-weight: 500;
+	letter-spacing: 0.06em;
+}
+
+/* 詳細ページ — ステージ写真の枠線を消し、余白で立たせる */
+.p-kitten-detail__stage {
+	border: none;
+}
+
+.p-kitten-detail__name {
+	font-weight: 500;
+	letter-spacing: 0.08em;
+}
+
+/* CTA帯 — 濃紺の夜空に一面の粉雪 */
+.p-cta {
+	background-color: #33424E;
+	background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1.3px);
+	background-size: 24px 24px;
+}
+
+.c-btn--inverse {
+	color: #33424E;
+}
+
+.p-cta__title {
+	font-weight: 500;
+	letter-spacing: 0.14em;
+}
+
+/* フッター — 面を持たず、一本の線だけで区切る */
+.p-footer {
+	background: transparent;
+}
+
+.p-footer__brand {
+	font-weight: 500;
+	letter-spacing: 0.2em;
+}

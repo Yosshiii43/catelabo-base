@@ -25,6 +25,10 @@ function catelabo_base_skins() {
 			'label'        => 'デフォルト（クリーム×モスグリーン）',
 			'google_fonts' => 'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
 		),
+    'yuki' => array(
+      'label'        => '雪（白×ブルーグレー）',
+      'google_fonts' => 'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+  ),
 	);
 	return apply_filters( 'catelabo_base_skins', $skins );
 }
