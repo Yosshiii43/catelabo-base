@@ -1,0 +1,176 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-hero — TOPヒーロー（バリアント: split / photo / minimal）
+ * バリアントを追加するときは、このファイルに p-hero--{name} を実装し、
+ * inc/theme-options.php の catelabo_hero_variants() に登録する。 */
+
+.p-hero {
+
+	/* ── 共通パーツ ── */
+	&__eyebrow {
+		font-family: var(--font-note);
+		font-size: rem(12.5);
+		font-weight: 500;
+		letter-spacing: 0.22em;
+		color: var(--color-ink-sub);
+		margin-bottom: rem(24);
+	}
+
+	&__title {
+		font-family: var(--font-heading);
+		font-size: rclamp(30, 52, 375, 1440);
+		font-weight: 600;
+		line-height: 1.55;
+		letter-spacing: 0.05em;
+	}
+
+	&__divider {
+		display: block;
+		width: rem(44);
+		height: 1px;
+		background: var(--color-ink);
+		opacity: 0.45;
+		margin-block: rclamp(20, 30, 375, 1440);
+	}
+
+	&__text {
+		font-size: rclamp(14, 15.5, 375, 1440);
+		line-height: 2.3;
+		max-width: rem(540);
+	}
+
+	&__cta {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: rem(16) rem(32);
+		margin-top: rclamp(28, 44, 375, 1440);
+	}
+
+	&__sub {
+		font-size: rem(13.5);
+		letter-spacing: 0.08em;
+		color: var(--color-ink-sub);
+	}
+
+	&__sub-arrow {
+		display: inline-block;
+		transition: transform 0.25s ease;
+	}
+
+	&__sub:hover .p-hero__sub-arrow {
+		transform: translateX(rem(4));
+	}
+
+	/* ── split: 左テキスト・右写真（写真はビューポート右端までブリード） ── */
+	&--split {
+		overflow: clip;
+
+		.p-hero__inner {
+			display: grid;
+			gap: rem(36);
+
+			@include mq(pc) {
+				grid-template-columns: 45fr 55fr;
+				gap: rem(64);
+				align-items: center;
+			}
+		}
+
+		.p-hero__body {
+			padding-block: rem(4) rem(56);
+
+			@include mq(pc) {
+				padding-block: rem(80);
+			}
+		}
+
+		.p-hero__media {
+			// SP: 写真を先頭に置き、左右いっぱいに
+			order: -1;
+			@include bleed-both();
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				aspect-ratio: 4 / 3;
+			}
+
+			// PC: 右カラムで右端までブリード、ほぼ全画面高
+			@include mq(pc) {
+				order: 0;
+				margin-inline: 0;
+				@include bleed-side(right);
+				height: 100%;
+				min-height: calc(100svh - #{rem(72)});
+
+				img {
+					aspect-ratio: auto;
+				}
+			}
+		}
+	}
+
+	/* ── photo: 写真全面＋オーバーレイ ── */
+	&--photo {
+		position: relative;
+		display: flex;
+		align-items: flex-end;
+		min-height: rclamp(440, 640, 375, 1440);
+		background-color: var(--color-primary);
+		background-size: cover;
+		background-position: center;
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.05) 55%);
+		}
+
+		.p-hero__inner {
+			position: relative;
+			width: 100%;
+			padding-block: rclamp(36, 64, 375, 1440);
+		}
+
+		.p-hero__eyebrow,
+		.p-hero__title,
+		.p-hero__text,
+		.p-hero__sub {
+			color: var(--color-on-photo);
+		}
+
+		.p-hero__divider {
+			background: var(--color-on-photo);
+			opacity: 0.6;
+		}
+
+		.c-btn--ghost {
+			color: var(--color-on-photo);
+			border-color: var(--color-on-photo);
+		}
+	}
+
+	/* ── minimal: 文字主体 ── */
+	&--minimal {
+		background: var(--color-surface);
+		border-bottom: 1px solid var(--color-line);
+		text-align: center;
+
+		.p-hero__inner {
+			padding-block: rclamp(64, 112, 375, 1440);
+		}
+
+		.p-hero__divider,
+		.p-hero__text {
+			margin-inline: auto;
+		}
+
+		.p-hero__cta {
+			justify-content: center;
+		}
+	}
+}

@@ -1,0 +1,67 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-kitten-list — 子猫一覧グリッド */
+
+.p-kitten-list {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: rem(24);
+
+	@include mq(tab) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@include mq(pc) {
+		grid-template-columns: repeat(3, 1fr);
+		gap: rem(32);
+	}
+
+	&__empty {
+		text-align: center;
+		color: var(--color-ink-sub);
+		padding-block: rem(40);
+	}
+}
+
+/* 一覧下の「もっと見る」ボタン行 */
+.p-more {
+	text-align: center;
+	margin-top: rem(36);
+}
+
+/* ── バリアント: rows（横長リスト） bodyの klist-rows ── */
+.klist-rows .p-kitten-list {
+	grid-template-columns: 1fr;
+	gap: rem(14);
+
+	@include mq(tab) {
+		grid-template-columns: 1fr;
+		gap: rem(16);
+	}
+
+	@include mq(pc) {
+		grid-template-columns: 1fr;
+		max-width: rem(880);
+		margin-inline: auto;
+	}
+}
+
+/* ── バリアント: mosaic（1枚目を大きく） bodyの klist-mosaic ── */
+.klist-mosaic .p-kitten-list {
+	@include mq(tab) {
+		grid-template-columns: repeat(2, 1fr);
+
+		> :first-child {
+			grid-column: span 2;
+		}
+	}
+
+	@include mq(pc) {
+		grid-template-columns: repeat(3, 1fr);
+
+		> :first-child {
+			grid-column: span 2;
+		}
+	}
+}

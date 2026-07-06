@@ -1,0 +1,46 @@
+// foundation/functions — 単位変換系の関数
+// 各パーシャルからは @use "../foundation/functions" as *;（階層に応じて ../ を調整）で読み込む
+
+@use "sass:math";
+
+/// pxからremを算出
+$base-font-size: 16;
+
+@function rem($px) {
+	@return math.div($px, $base-font-size) * 1rem;
+}
+
+/// Min-Max-Value Interpolation
+/// ビューポート幅 $minViewport〜$maxViewport の間で、値を $min〜$max(px) に線形補間する
+/// 使用例: font-size: rclamp(24, 64, 375, 1440);
+@function rclamp($min, $max, $minViewport, $maxViewport) {
+	$vwScale: math.div($max - $min, $maxViewport - $minViewport); // vw単位でのスケール
+	$baseOffset: $min - $minViewport * $vwScale;                  // 最小値からのオフセット
+
+	$minRem: math.div($min, $base-font-size);
+	$maxRem: math.div($max, $base-font-size);
+	$baseOffsetRem: math.div($baseOffset, $base-font-size);
+	$vwScaleUnit: $vwScale * 100;
+
+	@return clamp(#{$minRem}rem, #{$baseOffsetRem}rem + #{$vwScaleUnit}vw, #{$maxRem}rem);
+}
+
+/// pxからvwを算出（デザインカンプ幅基準）
+$pcDesignSize: 1440;
+$tabDesignSize: 768;
+$spDesignSize: 375;
+
+// PCデザイン用
+@function pc-vw($px) {
+	@return math.div($px, $pcDesignSize) * 100vw;
+}
+
+// tabletデザイン用
+@function tab-vw($px) {
+	@return math.div($px, $tabDesignSize) * 100vw;
+}
+
+// SPデザイン用
+@function sp-vw($px) {
+	@return math.div($px, $spDesignSize) * 100vw;
+}

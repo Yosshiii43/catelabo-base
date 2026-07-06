@@ -1,0 +1,25 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-cta — CTA帯（TOP・下層の締め） */
+
+.p-cta {
+	background: var(--color-primary);
+	color: var(--color-primary-ink);
+
+	&__inner {
+		text-align: center;
+		padding-block: rclamp(48, 72, 375, 1440);
+	}
+
+	&__title {
+		font-size: rclamp(20, 26, 375, 1440);
+	}
+
+	&__text {
+		margin-top: rem(10);
+		margin-bottom: rem(24);
+		font-size: rem(14.5);
+		opacity: 0.9;
+	}
+}

@@ -1,0 +1,137 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-kitten-card — 子猫カード（一覧・TOP共通） */
+
+.p-kitten-card {
+	background: var(--color-surface);
+	border: var(--border-card);
+	border-radius: var(--radius-m);
+	box-shadow: var(--shadow-card);
+	overflow: hidden;
+	transition: transform 0.25s ease;
+
+	&:hover {
+		transform: translateY(rem(-4));
+	}
+
+	&__link {
+		display: block;
+		color: inherit;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	&__photo {
+		position: relative;
+		aspect-ratio: 4 / 3;
+		background: var(--color-bg);
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	&__status {
+		position: absolute;
+		top: rem(10);
+		left: rem(10);
+	}
+
+	&__body {
+		padding: rem(14) rem(16) rem(16);
+
+		@include mq(tab) {
+			padding: rem(18) rem(20) rem(20);
+		}
+	}
+
+	&__breed {
+		font-family: var(--font-note);
+		font-size: rem(11.5);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		color: var(--color-primary);
+		margin-bottom: rem(4);
+	}
+
+	&__name {
+		font-size: rem(15);
+		font-weight: 700;
+		line-height: 1.6;
+
+		@include mq(tab) {
+			font-size: rem(16.5);
+		}
+	}
+
+	&__meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: rem(4) rem(10);
+		margin-top: rem(8);
+		font-size: rem(12.5);
+		line-height: 1.6;
+		color: var(--color-ink-sub);
+	}
+
+	&__age {
+		font-weight: 700;
+		color: var(--color-primary);
+	}
+
+	// ご家族決定はトーンダウンして「募集中」を引き立てる
+	&[data-status="kettei"] {
+		.p-kitten-card__photo img {
+			filter: grayscale(0.35) opacity(0.85);
+		}
+	}
+}
+
+/* ── バリアント: rows（写真左・情報右の横長カード） ── */
+.klist-rows .p-kitten-card {
+
+	.p-kitten-card__link {
+		display: grid;
+		grid-template-columns: rem(120) 1fr;
+		align-items: stretch;
+
+		@include mq(tab) {
+			grid-template-columns: rem(220) 1fr;
+		}
+	}
+
+	.p-kitten-card__photo {
+		aspect-ratio: 1 / 1;
+		height: 100%;
+
+		@include mq(tab) {
+			aspect-ratio: 4 / 3;
+		}
+	}
+
+	.p-kitten-card__body {
+		align-self: center;
+		padding: rem(12) rem(16);
+
+		@include mq(tab) {
+			padding: rem(18) rem(28);
+		}
+	}
+}
+
+/* ── バリアント: mosaic（1枚目のカードの写真を横長に） ── */
+.klist-mosaic .p-kitten-list > :first-child .p-kitten-card__photo {
+	@include mq(tab) {
+		aspect-ratio: 16 / 9;
+	}
+}
+
+/* ── モーション: richのホバー強化 ── */
+.motion-rich .p-kitten-card:hover {
+	transform: translateY(rem(-8));
+}

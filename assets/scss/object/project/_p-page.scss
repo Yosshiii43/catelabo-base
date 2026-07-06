@@ -1,0 +1,153 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-page — 固定ページ（本文・法定表示テーブル） */
+
+.p-page {
+
+	&__content {
+		max-width: rem(720);
+		margin-inline: auto;
+
+		> * + * {
+			margin-top: rem(20);
+		}
+
+		/* h2 の書式と装飾は _c-section-title.scss（hstyle切替）で定義 */
+
+		h3 {
+			font-size: rem(17);
+			margin-top: rem(32);
+		}
+
+		ul,
+		ol {
+			padding-left: rem(24);
+		}
+
+		a {
+			color: var(--color-primary);
+			text-decoration: underline;
+		}
+
+		img {
+			border-radius: var(--radius-m);
+		}
+	}
+
+	/* 法定表示テーブル */
+	&__legal {
+		max-width: rem(720);
+		margin-inline: auto;
+		margin-bottom: rem(48);
+	}
+
+	/* __legal-title の書式と装飾は _c-section-title.scss（hstyle切替）で定義 */
+
+	&__legal-table {
+		width: 100%;
+		border-collapse: collapse;
+		background: var(--color-surface);
+		border: var(--border-card);
+		border-radius: var(--radius-m);
+		overflow: hidden;
+		font-size: rem(14);
+
+		th,
+		td {
+			padding: rem(12) rem(16);
+			border-bottom: 1px solid var(--color-line);
+			text-align: left;
+			vertical-align: top;
+		}
+
+		tr:last-child th,
+		tr:last-child td {
+			border-bottom: none;
+		}
+
+		th {
+			width: rem(160);
+			font-family: var(--font-note);
+			font-weight: 700;
+			font-size: rem(13);
+			color: var(--color-ink-sub);
+			background: var(--color-surface-2);
+			border-right: 1px solid var(--color-line);
+
+			@include mq(sp) {
+				width: rem(120);
+			}
+		}
+	}
+}
+
+/* お問い合わせフォーム部品（Contact Form 7 等のプラグイン出力を整える） */
+.p-page__content form {
+
+	label {
+		display: block;
+		font-weight: 700;
+		font-size: rem(14);
+		margin-bottom: rem(28); /* 項目間の余白 */
+	}
+
+	input[type="text"],
+	input[type="email"],
+	input[type="tel"],
+	input[type="url"],
+	select,
+	textarea {
+		width: 100%;
+		margin-top: rem(8); /* ラベル文字と入力枠の間隔 */
+		padding: rem(12) rem(14);
+		font-size: rem(16); /* iOSズーム防止 */
+		background: var(--color-surface);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-s);
+
+		&:focus-visible {
+			outline: 2px solid var(--color-primary);
+			outline-offset: 1px;
+		}
+	}
+
+	input[type="submit"],
+	button[type="submit"] {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: rem(15);
+		letter-spacing: 0.05em;
+		color: var(--color-primary-ink);
+		background: var(--color-primary);
+		border: none;
+		border-radius: var(--radius-btn);
+		padding: rem(14) rem(40);
+		margin-top: rem(8);
+		cursor: pointer;
+		box-shadow: var(--shadow-card);
+		transition: transform 0.2s ease;
+
+		&:hover {
+			transform: translateY(rem(-2));
+		}
+	}
+
+	.wpcf7-not-valid-tip {
+		display: block;
+		margin-top: rem(6);
+		font-size: rem(12.5);
+	}
+}
+
+/* 送信結果メッセージ */
+.p-page__content .wpcf7 .wpcf7-response-output {
+	margin: rem(28) 0 0;
+	padding: rem(12) rem(16);
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius-s);
+	font-size: rem(14);
+}

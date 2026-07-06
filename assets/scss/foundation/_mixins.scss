@@ -1,0 +1,94 @@
+// foundation/mixins — メディアクエリ・コンテナクエリ・レイアウト補助
+
+@use "sass:map";
+
+/// メディアクエリ
+/// sp  = 767px以下（SP専用の指定に使う・max-width）
+/// tab = 768px以上／ pc = 1024px以上（min-widthベースのSPファースト）
+$breakpoint: (
+	sp:  'screen and (max-width: 767px)',
+	tab: 'screen and (min-width: 768px)',
+	pc:  'screen and (min-width: 1024px)',
+);
+
+@mixin mq($bp) {
+	@if not map.has-key($breakpoint, $bp) {
+		@error "mq: 未定義のブレークポイント '#{$bp}'（sp / tab / pc のいずれか）";
+	}
+	@media #{map.get($breakpoint, $bp)} {
+		@content;
+	}
+}
+// 使用例
+// @include mq(tab) {
+//   background-color: #ffbebe;
+// }
+
+/// コンテナクエリ共通
+@mixin cq($container-name, $min-width) {
+	@supports (container-type: inline-size) {
+		@container #{$container-name} (min-width: #{$min-width}) {
+			@content;
+		}
+	}
+}
+// 使用例
+// @include cq(main, 744px) {
+//   .p-section { font-size: 1.4rem; }
+// }
+
+// -----------------------------------------------------------------------------
+// bleed helpers — コンテナの内側からビューポート端まで伸ばす
+// 使い方:
+//   @include bleed-side(right);
+//   @include bleed-side(left);
+//   @include bleed-both();   // 左右ともビュー端まで（full-bleed）
+// ユーティリティクラス版は object/utility/_u-helpers.scss にある
+// 前提: 祖先が中央寄せ（margin-inline: auto）。親のpadding有無は問わない
+// 注意: 50vw系はスクロールバー幅ぶん右にはみ出すため、
+//       foundation/_base.scss で html { overflow-x: clip } を設定済み
+// -----------------------------------------------------------------------------
+
+// サイド単体（左または右）をビュー端まで伸ばす
+@mixin bleed-side($side: right) {
+	@if $side == right {
+		margin-right: calc(50% - 50vw);
+	} @else if $side == left {
+		margin-left: calc(50% - 50vw);
+	} @else {
+		@error "bleed-side: $side は 'left' か 'right'";
+	}
+	width: calc(100% + (50vw - 50%));
+}
+
+// 両側をビュー端まで伸ばす（フルブリード）
+@mixin bleed-both() {
+	margin-inline: calc(50% - 50vw);
+	width: 100vw;
+}
+
+/// 矢印（疑似要素での使用を想定）
+/// $size: 一辺のpx / $bold: 線の太さpx / $direction: 'top' 'right' 'bottom' 'left'
+@mixin arrow($size, $bold, $color, $direction) {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	width: #{$size}px;
+	height: #{$size}px;
+	border-style: solid;
+	border-width: 0 #{$bold}px #{$bold}px 0;
+	border-radius: #{$bold}px;
+	border-color: $color;
+
+	@if $direction == 'left' {
+		transform: rotate(135deg);
+	} @else if $direction == 'top' {
+		transform: rotate(225deg);
+	} @else if $direction == 'right' {
+		transform: rotate(-45deg);
+	} @else if $direction == 'bottom' {
+		transform: rotate(45deg);
+	} @else {
+		@error "arrow: $direction は 'top' 'right' 'bottom' 'left' のいずれか";
+	}
+}

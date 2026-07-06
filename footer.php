@@ -1,0 +1,32 @@
+</main>
+
+<footer class="p-footer">
+	<div class="p-footer__inner l-container">
+
+		<p class="p-footer__brand"><?php bloginfo( 'name' ); ?></p>
+
+		<nav class="p-footer__nav" aria-label="フッターメニュー">
+			<?php
+			wp_nav_menu( array(
+				'theme_location' => 'footer',
+				'container'      => false,
+				'menu_class'     => 'p-footer__menu',
+				'depth'          => 1,
+				'fallback_cb'    => '__return_empty_string',
+			) );
+			?>
+		</nav>
+
+		<?php $license = get_theme_mod( 'catelabo_license' ); ?>
+		<?php if ( $license ) : ?>
+			<p class="p-footer__license"><?php echo esc_html( $license ); ?></p>
+		<?php endif; ?>
+
+		<p class="p-footer__copy">&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?></p>
+
+	</div>
+</footer>
+
+<?php wp_footer(); ?>
+</body>
+</html>

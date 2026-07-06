@@ -1,0 +1,23 @@
+/* skins/skin-default — デフォルトスキン
+ *
+ * デフォルトのトークン値は foundation/_tokens.scss にあるため、このファイルは空でよい。
+ * 新しい顧客スキンを作るときは、このファイルをコピーして skin-{client}.scss とし、
+ * :root のトークン再定義を書く（上書きは100行以内・テーマ開発指針 §2 参照）。
+ * ビルド：`sass assets/scss:assets/css --no-source-map`
+ *
+ * ── 例：紺×明朝の「上品」系スキンにする場合 ──────────────
+ * :root {
+ *     --color-bg:          #10202F;
+ *     --color-surface:     #182B3D;
+ *     --color-ink:         #EDF1F5;
+ *     --color-ink-sub:     #9FB0C0;
+ *     --color-primary:     #D8A25A;
+ *     --color-primary-ink: #10202F;
+ *     --color-line:        rgba(237, 241, 245, 0.16);
+ *     --font-heading:      "Shippori Mincho B1", serif;
+ *     --radius-s: 2px; --radius-m: 4px; --radius-l: 4px;
+ *     --border-card: 1px solid var(--color-line);
+ *     --shadow-card: none;
+ * }
+ * ※Google Fontsの変更は functions.php の catelabo_base_skins() に登録する。
+ * ──────────────────────────────────────────────── */

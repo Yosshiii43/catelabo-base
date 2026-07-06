@@ -1,0 +1,31 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/component/c-badge — ステータスバッジ */
+
+.c-badge {
+	display: inline-flex;
+	align-items: center;
+	font-family: var(--font-note);
+	font-size: rem(12);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	line-height: 1;
+	color: var(--color-status-ink);
+	padding: rem(6) rem(12);
+	border-radius: 999px;
+
+	// ステータスslug（boshu / shodan / kettei / sotsugyo）と対応
+	&--boshu {
+		background: var(--color-status-open);
+	}
+
+	&--shodan {
+		background: var(--color-status-talk);
+	}
+
+	&--kettei,
+	&--sotsugyo {
+		background: var(--color-status-done);
+	}
+}

@@ -1,0 +1,58 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-greeting — TOPのごあいさつセクション */
+
+.p-greeting {
+
+	&__inner {
+		display: grid;
+		gap: rem(32);
+
+		@include mq(tab) {
+			grid-template-columns: 42fr 58fr;
+			gap: rem(56);
+			align-items: center;
+		}
+
+		/* 写真なしのとき：1カラムで本文を読みやすい幅に */
+		&--noimage {
+			@include mq(tab) {
+				grid-template-columns: 1fr;
+			}
+
+			.p-greeting__body {
+				max-width: rem(680);
+				margin-inline: auto;
+			}
+		}
+	}
+
+	&__media img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		border-radius: var(--radius-m);
+		box-shadow: var(--shadow-card);
+	}
+
+	.c-heading {
+		margin-bottom: rem(20);
+	}
+
+	&__text {
+		line-height: 2.3;
+	}
+
+	&__more {
+		margin-top: rem(20);
+		font-size: rem(13.5);
+		letter-spacing: 0.06em;
+
+		a {
+			color: var(--color-primary);
+			font-weight: 700;
+		}
+	}
+}

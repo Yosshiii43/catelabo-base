@@ -1,0 +1,15 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-parent-list — 親猫一覧グリッド */
+
+.p-parent-list {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: rem(16);
+
+	@include mq(tab) {
+		grid-template-columns: repeat(2, 1fr);
+		gap: rem(24);
+	}
+}

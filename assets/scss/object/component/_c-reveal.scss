@@ -1,0 +1,74 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/component/c-reveal — スクロール出現モーション
+ *
+ * bodyの motion-{none|soft|rich}（カスタマイザー「モーション」）で強度を切替。
+ * main.js が .c-reveal を監視し、表示域に入ったら is-inview を付与する。
+ * ・bodyに .js が無い（JS無効/IntersectionObserver非対応）場合は最初から表示
+ * ・prefers-reduced-motion 時は完全に無効化
+ * ・独自のスクロール監視を別途実装しないこと（この仕組みに乗せる）
+ */
+
+/* デフォルト＝表示（motion-none・非対応環境の保険） */
+.c-reveal {
+	opacity: 1;
+	transform: none;
+}
+
+/* soft / rich：JSが有効なときだけ隠してから立ち上げる */
+.js.motion-soft .c-reveal,
+.js.motion-rich .c-reveal {
+	opacity: 0;
+	transform: translateY(rem(16));
+	transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 0.7, 0.25, 1);
+
+	&.is-inview {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.js.motion-rich .c-reveal {
+	transform: translateY(rem(28));
+	transition-duration: 0.9s;
+}
+
+/* 並んだカードは時間差で立ち上げる */
+.js.motion-soft .p-kitten-list .c-reveal:nth-child(2n),
+.js.motion-rich .p-kitten-list .c-reveal:nth-child(2n) {
+	transition-delay: 0.08s;
+}
+
+.js.motion-soft .p-kitten-list .c-reveal:nth-child(3n),
+.js.motion-rich .p-kitten-list .c-reveal:nth-child(3n) {
+	transition-delay: 0.15s;
+}
+
+/* rich限定：ヒーロー写真のゆっくりズーム */
+@keyframes catelabo-slow-zoom {
+	from {
+		transform: scale(1.06);
+	}
+	to {
+		transform: scale(1);
+	}
+}
+
+.js.motion-rich .p-hero__media img {
+	animation: catelabo-slow-zoom 8s ease-out both;
+}
+
+/* reduced-motion：すべて無効化して常時表示 */
+@media (prefers-reduced-motion: reduce) {
+	.js.motion-soft .c-reveal,
+	.js.motion-rich .c-reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+
+	.js.motion-rich .p-hero__media img {
+		animation: none;
+	}
+}

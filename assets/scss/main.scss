@@ -1,0 +1,31 @@
+// Catelabo Base — エントリーポイント
+// FLOCSS順：foundation → layout → object(component → project → utility)
+// ビルド：テーマ直下で `sass assets/scss:assets/css --no-source-map`（Dart Sass）
+// トークンはCSSカスタムプロパティで定義（スキン実行時切替のため、SCSS変数にしない）
+
+@use "foundation/reset";
+@use "foundation/tokens";
+@use "foundation/base";
+
+@use "layout/l-container";
+@use "object/project/p-header";
+@use "object/project/p-footer";
+
+@use "object/component/c-btn";
+@use "object/component/c-badge";
+@use "object/component/c-heading";
+@use "object/component/c-section-title";
+@use "object/component/c-reveal";
+
+@use "object/project/p-kitten-card";
+@use "object/project/p-kitten-list";
+@use "object/project/p-kitten-detail";
+@use "object/project/p-parent-card";
+@use "object/project/p-parent-list";
+@use "object/project/p-hero";
+@use "object/project/p-cta";
+@use "object/project/p-greeting";
+@use "object/project/p-page";
+@use "object/project/p-manage";
+
+@use "object/utility/u-helpers";

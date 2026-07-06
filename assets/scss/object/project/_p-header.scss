@@ -1,0 +1,154 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-header — ヘッダー（モバイルファースト） */
+
+.p-header {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	background: var(--color-surface);
+	border-bottom: 1px solid var(--color-line);
+}
+
+.p-header__inner {
+	max-width: none; /* ヘッダーは常にフル幅（コンテナ幅に縛らない） */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: calc(var(--space) * 3);
+	min-height: 64px;
+	position: relative;
+}
+
+.p-header__brand {
+	display: flex;
+	align-items: center;
+}
+
+.p-header__brand .custom-logo {
+	max-height: 44px;
+	width: auto;
+}
+
+.p-header__sitename {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: 20px;
+	letter-spacing: 0.08em;
+	color: var(--color-ink);
+}
+
+/* ── ハンバーガー（モバイル） ── */
+.p-header__toggle {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+}
+
+.p-header__toggle-bar,
+.p-header__toggle-bar::before,
+.p-header__toggle-bar::after {
+	content: "";
+	display: block;
+	width: 22px;
+	height: 2px;
+	background: var(--color-ink);
+	border-radius: 2px;
+	transition: transform 0.25s ease, opacity 0.2s ease;
+	position: relative;
+}
+
+.p-header__toggle-bar::before {
+	position: absolute;
+	top: -7px;
+}
+
+.p-header__toggle-bar::after {
+	position: absolute;
+	top: 7px;
+}
+
+.p-header__toggle[aria-expanded="true"] .p-header__toggle-bar {
+	transform: rotate(45deg);
+}
+
+.p-header__toggle[aria-expanded="true"] .p-header__toggle-bar::before {
+	transform: rotate(-90deg) translateX(-7px);
+}
+
+.p-header__toggle[aria-expanded="true"] .p-header__toggle-bar::after {
+	opacity: 0;
+}
+
+/* ── ナビ（モバイル：開閉パネル） ── */
+.p-header__nav {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background: var(--color-surface);
+	border-bottom: 1px solid var(--color-line);
+	padding: calc(var(--space) * 2) calc(var(--space) * 2.5) calc(var(--space) * 3);
+}
+
+.p-header__nav.is-open {
+	display: block;
+}
+
+.p-header__menu {
+	display: grid;
+	gap: calc(var(--space) * 0.5);
+	margin-bottom: calc(var(--space) * 2);
+}
+
+.p-header__menu a {
+	display: block;
+	padding: calc(var(--space) * 1.25) 0;
+	font-weight: 500;
+	border-bottom: 1px solid var(--color-line);
+}
+
+.p-header__cta {
+	width: 100%;
+	justify-content: center;
+}
+
+/* ── デスクトップ ── */
+@include mq(pc) {
+	.p-header__inner {
+		padding-inline: rem(40);
+	}
+
+	.p-header__toggle {
+		display: none;
+	}
+
+	.p-header__nav {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--space) * 4);
+		position: static;
+		background: none;
+		border: none;
+		padding: 0;
+	}
+
+	.p-header__menu {
+		display: flex;
+		gap: calc(var(--space) * 4);
+		margin: 0;
+	}
+
+	.p-header__menu a {
+		padding: calc(var(--space) * 0.5) 0;
+		border: none;
+		font-size: 14.5px;
+	}
+
+	.p-header__cta {
+		width: auto;
+	}
+}

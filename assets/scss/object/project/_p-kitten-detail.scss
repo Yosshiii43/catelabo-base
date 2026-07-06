@@ -1,0 +1,229 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-kitten-detail — 子猫詳細ページ */
+
+.p-kitten-detail {
+
+	&__back {
+		margin-bottom: rem(24);
+		font-size: rem(13.5);
+
+		a {
+			color: var(--color-ink-sub);
+		}
+	}
+
+	&__grid {
+		display: grid;
+		gap: rem(28);
+
+		@include mq(tab) {
+			grid-template-columns: 55fr 45fr;
+			gap: rem(48);
+			align-items: start;
+		}
+	}
+
+	/* ── ギャラリー ── */
+	&__stage {
+		position: relative;
+		aspect-ratio: 4 / 3;
+		border-radius: var(--radius-m);
+		overflow: hidden;
+		background: var(--color-surface);
+		border: var(--border-card);
+	}
+
+	&__stage-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	&__status {
+		position: absolute;
+		top: rem(12);
+		left: rem(12);
+	}
+
+	&__thumbs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: rem(8);
+		margin-top: rem(10);
+	}
+
+	&__thumb {
+		width: rem(64);
+		height: rem(64);
+		border-radius: var(--radius-s);
+		overflow: hidden;
+		border: 2px solid transparent;
+		padding: 0;
+		transition: border-color 0.2s ease, opacity 0.2s ease;
+		opacity: 0.75;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+
+		&.is-current {
+			border-color: var(--color-primary);
+			opacity: 1;
+		}
+	}
+
+	/* ── 基本情報 ── */
+	&__breed {
+		font-family: var(--font-note);
+		font-size: rem(13);
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		color: var(--color-primary);
+		margin-bottom: rem(6);
+	}
+
+	&__name {
+		font-size: rclamp(21, 26, 375, 1440);
+		line-height: 1.6;
+		margin-bottom: rem(20);
+	}
+
+	&__spec {
+		display: grid;
+		grid-template-columns: rem(88) 1fr;
+		gap: rem(10) rem(18);
+		font-size: rem(14.5);
+		line-height: 1.8;
+
+		dt {
+			font-family: var(--font-note);
+			font-weight: 700;
+			font-size: rem(13);
+			color: var(--color-ink-sub);
+			padding-top: rem(1);
+		}
+	}
+
+	&__age {
+		color: var(--color-primary);
+		font-weight: 700;
+	}
+
+	&__health {
+		margin-top: rem(24);
+		padding: rem(18) rem(20);
+		background: var(--color-surface);
+		border: var(--border-card);
+		border-radius: var(--radius-m);
+	}
+
+	&__health-title {
+		font-size: rem(14.5);
+		margin-bottom: rem(12);
+	}
+
+	&__health-note {
+		margin-top: rem(10);
+		font-size: rem(13.5);
+		color: var(--color-ink-sub);
+	}
+
+	&__cta {
+		margin-top: rem(28);
+
+		.c-btn {
+			width: 100%;
+		}
+
+		@include mq(tab) {
+			.c-btn {
+				width: auto;
+				min-width: rem(280);
+			}
+		}
+	}
+
+	&__decided {
+		font-size: rem(14.5);
+		color: var(--color-ink-sub);
+
+		a {
+			color: var(--color-primary);
+			font-weight: 700;
+		}
+	}
+
+	/* ── 下部セクション（紹介文・動画・両親） ── */
+	/* __section-title の書式と装飾は object/component/_c-section-title.scss（hstyle切替）で定義 */
+
+	&__intro,
+	&__video,
+	&__parents {
+		margin-top: rclamp(48, 72, 375, 1440);
+	}
+
+	&__intro p {
+		max-width: rem(680);
+	}
+
+	&__video-embed {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		max-width: rem(680);
+		border-radius: var(--radius-m);
+		overflow: hidden;
+		background: var(--color-surface);
+
+		iframe {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			border: 0;
+		}
+	}
+
+	&__parents-grid {
+		display: grid;
+		gap: rem(16);
+
+		@include mq(tab) {
+			grid-template-columns: 1fr 1fr;
+			gap: rem(24);
+			max-width: rem(760);
+		}
+	}
+
+	/* ── スマホ追従CTA ── */
+	&__ctabar {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 15;
+		padding: rem(10) rem(16) calc(#{rem(10)} + env(safe-area-inset-bottom));
+		background: var(--color-surface);
+		border-top: 1px solid var(--color-line);
+
+		.c-btn {
+			width: 100%;
+		}
+
+		@include mq(tab) {
+			display: none;
+		}
+	}
+
+	// 追従バーに隠れないよう、SPでは末尾に余白を確保
+	@include mq(sp) {
+		padding-bottom: rem(88);
+	}
+}

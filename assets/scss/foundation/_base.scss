@@ -1,0 +1,45 @@
+/* foundation/base — 素の要素のベーススタイル */
+
+html {
+	overflow-x: clip; /* bleed(50vw系)のスクロールバー幅はみ出し対策 */
+}
+
+body {
+	font-family: var(--font-body);
+	font-size: 16px;
+	line-height: 1.9;
+	letter-spacing: 0.02em;
+	color: var(--color-ink);
+	background-color: var(--color-bg);
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	line-height: 1.6;
+	letter-spacing: 0.04em;
+}
+
+a {
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+}
+
+a:hover {
+	opacity: 0.8;
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+
+::selection {
+	background: var(--color-primary);
+	color: var(--color-primary-ink);
+}

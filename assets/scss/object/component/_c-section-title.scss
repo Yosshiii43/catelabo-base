@@ -1,0 +1,76 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/component/c-section-title — セクション見出しの書式と装飾
+ *
+ * 対象セレクタ（詳細ページ・固定ページ本文のh2・法定表示）を一元管理し、
+ * 装飾は body の hstyle-* クラス（カスタマイザー「見出しの装飾スタイル」）で切り替える。
+ * スタイルを追加するときは、ここにブロックを足して
+ * inc/theme-options.php の catelabo_heading_styles() に登録する。 */
+
+.p-kitten-detail__section-title,
+.p-page__legal-title {
+	font-family: var(--font-heading);
+	font-size: rem(18);
+	line-height: 1.6;
+	margin-bottom: rem(16);
+}
+
+.p-page__content h2 {
+	font-family: var(--font-heading);
+	font-size: rem(20);
+	line-height: 1.6;
+	margin-top: rem(40);
+}
+
+/* ── line: 左の縦線（デフォルト） ── */
+.hstyle-line {
+	.p-kitten-detail__section-title,
+	.p-page__legal-title,
+	.p-page__content h2 {
+		padding-left: rem(14);
+		border-left: rem(4) solid var(--color-primary);
+	}
+}
+
+/* ── bottom: 細い下線＋アクセントの短線 ── */
+.hstyle-bottom {
+	.p-kitten-detail__section-title,
+	.p-page__legal-title,
+	.p-page__content h2 {
+		position: relative;
+		padding-bottom: rem(12);
+		border-bottom: 1px solid var(--color-line);
+
+		&::after {
+			content: "";
+			position: absolute;
+			left: 0;
+			bottom: -1px;
+			width: rem(48);
+			height: 2px;
+			background: var(--color-primary);
+		}
+	}
+}
+
+/* ── dot: 先頭に丸 ── */
+.hstyle-dot {
+	.p-kitten-detail__section-title,
+	.p-page__legal-title,
+	.p-page__content h2 {
+		&::before {
+			content: "";
+			display: inline-block;
+			width: rem(10);
+			height: rem(10);
+			border-radius: 50%;
+			background: var(--color-primary);
+			margin-right: rem(12);
+			vertical-align: rem(2);
+		}
+	}
+}
+
+/* ── plain: 装飾なし ── */
+/* hstyle-plain は追加スタイルなし（書式のみ） */

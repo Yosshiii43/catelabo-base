@@ -1,0 +1,30 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/utility/u-helpers — ユーティリティ（乱用禁止） */
+
+/* スクリーンリーダー専用テキスト */
+.u-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* コンテナからビューポート端まで伸ばす（mixin版は global/_mixins.scss） */
+.u-bleed-right {
+	@include bleed-side(right);
+}
+
+.u-bleed-left {
+	@include bleed-side(left);
+}
+
+.u-bleed-both {
+	@include bleed-both();
+}

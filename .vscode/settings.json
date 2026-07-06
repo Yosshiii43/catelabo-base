@@ -1,0 +1,5 @@
+{
+  "liveSassCompile.settings.generateMap": false,
+  "liveSassCompile.settings.forceBaseDirectory": "/assets/scss",
+  "liveSassCompile.settings.savePath": "/assets/css"
+}

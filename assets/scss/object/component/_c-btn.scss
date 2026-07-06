@@ -1,0 +1,44 @@
+/* object/component/c-btn — ボタン */
+
+.c-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: calc(var(--space) * 1);
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 0.05em;
+	line-height: 1;
+	padding: calc(var(--space) * 1.75) calc(var(--space) * 3.5);
+	border-radius: var(--radius-btn);
+	transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.c-btn:hover {
+	opacity: 1;
+	transform: translateY(-2px);
+}
+
+.c-btn--primary {
+	background: var(--color-primary);
+	color: var(--color-primary-ink);
+	box-shadow: var(--shadow-card);
+}
+
+.c-btn--ghost {
+	color: var(--color-ink);
+	border: 1.5px solid var(--color-ink);
+	background: transparent;
+}
+
+.c-btn--inverse {
+	background: var(--color-primary-ink);
+	color: var(--color-primary);
+	box-shadow: var(--shadow-card);
+}
+
+.c-btn--small {
+	font-size: 13px;
+	padding: calc(var(--space) * 1.25) calc(var(--space) * 2.5);
+}
