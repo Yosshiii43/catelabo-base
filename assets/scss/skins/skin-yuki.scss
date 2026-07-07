@@ -166,9 +166,12 @@ body::before {
 			grid-column: 2;
 			grid-row: 1 / span 3;
 			writing-mode: vertical-rl;
-			font-size: rclamp(36, 64, 768, 1440);
-			letter-spacing: 0.32em;
-			max-height: rem(560);
+			/* 折り返しは手動改行のみ（自動折返しで「で、」だけの行が生まれるのを防ぐ）。
+			   1行は全角10文字前後を目安に、カスタマイザーの改行で制御する。
+			   フォントは画面の高さにも連動し、低い画面でははみ出す前に縮む */
+			white-space: nowrap;
+			font-size: min(#{rclamp(34, 60, 768, 1440)}, 5.6svh);
+			letter-spacing: 0.26em;
 			margin-left: auto;
 		}
 
@@ -185,8 +188,134 @@ body::before {
 	}
 }
 
-/* split / photo を選んだ場合の最低限の上品化 */
-.p-hero--split .p-hero__title,
+/* ── split を選んだ場合：縦長の額装写真×縦書きに再構成 ──
+ * 「写真を入れたい猫舎」はこちら。minimal＝文字の間、split＝写真の間 */
+.p-hero--split {
+	background: transparent;
+	border-bottom: none;
+
+	.p-hero__inner {
+		position: relative;
+		min-height: min(88svh, rem(860));
+	}
+
+	.p-hero__inner::before {
+		content: "Cattery";
+		position: absolute;
+		left: -1%;
+		bottom: 2%;
+		z-index: 0;
+		font-family: var(--font-heading);
+		font-size: rclamp(80, 190, 375, 1440);
+		line-height: 1;
+		color: transparent;
+		-webkit-text-stroke: 1px rgba(157, 180, 198, 0.3);
+		pointer-events: none;
+		white-space: nowrap;
+	}
+
+	.p-hero__body {
+		position: relative;
+		z-index: 1;
+	}
+
+	.p-hero__eyebrow {
+		letter-spacing: 0.34em;
+	}
+
+	.p-hero__divider {
+		display: none;
+	}
+
+	.p-hero__text {
+		line-height: 2.7;
+		letter-spacing: 0.08em;
+	}
+
+	/* 写真＝縦長・氷色の額装 */
+	.p-hero__media {
+		position: relative;
+
+		img {
+			aspect-ratio: 4 / 5;
+			border-radius: var(--radius-xs);
+			box-shadow: none;
+		}
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border: 1px solid var(--color-accent);
+			border-radius: var(--radius-xs);
+			translate: rem(14) rem(14);
+			pointer-events: none;
+		}
+	}
+
+	@include mq(pc) {
+		.p-hero__inner {
+			grid-template-columns: 1fr auto;
+			gap: rem(64);
+			align-items: center;
+		}
+
+		/* 全画面ブリードをやめ、幅を絞った縦長写真に */
+		.p-hero__media {
+			order: 2;
+			margin-inline: 0;
+			width: min(34vw, rem(440));
+			height: auto;
+			min-height: 0;
+
+			img {
+				aspect-ratio: 3 / 4;
+				height: auto;
+			}
+		}
+
+		/* 本文側は minimal と同じ縦書き構成 */
+		.p-hero__body {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			grid-template-rows: auto 1fr auto;
+			column-gap: rem(48);
+			padding-block: rem(64);
+		}
+
+		.p-hero__eyebrow {
+			grid-column: 1;
+			grid-row: 1;
+		}
+
+		.p-hero__title {
+			grid-column: 2;
+			grid-row: 1 / span 3;
+			writing-mode: vertical-rl;
+			white-space: nowrap;
+			font-size: min(#{rclamp(32, 52, 1024, 1440)}, 5svh);
+			font-weight: 500;
+			letter-spacing: 0.26em;
+			line-height: 2;
+			margin-left: auto;
+		}
+
+		.p-hero__text {
+			grid-column: 1;
+			grid-row: 2;
+			align-self: end;
+			max-width: rem(420);
+		}
+
+		.p-hero__cta {
+			grid-column: 1;
+			grid-row: 3;
+			justify-content: flex-start;
+		}
+	}
+}
+
+/* photo（写真全面）を選んだ場合の最低限の上品化 */
 .p-hero--photo .p-hero__title {
 	font-weight: 500;
 	letter-spacing: 0.12em;
@@ -352,6 +481,27 @@ body {
 	padding: rem(4) 0 0 rem(20);
 }
 
+/* ── 額装フレーム（任意適用） ──
+ * 固定ページ本文の画像ブロックに、エディタの「高度な設定→追加CSSクラス」で
+ * u-frame を付けると、ごあいさつと同じ二重フレームになる */
+.p-page__content .u-frame {
+	position: relative;
+
+	img {
+		border-radius: var(--radius-xs);
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-xs);
+		translate: rem(12) rem(12);
+		pointer-events: none;
+	}
+}
+
 /* ══ 7. 詳細ページ ══ */
 
 .p-kitten-detail__stage {
@@ -369,8 +519,12 @@ body {
 	position: relative;
 	overflow: hidden;
 	background-color: #33424E;
-	background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1.4px);
-	background-size: 26px 26px;
+	/* 静止時も「整列したグリッド」に見えないよう、粒の大きさ違いを2層ずらして重ねる */
+	background-image:
+		radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1.4px),
+		radial-gradient(rgba(255, 255, 255, 0.09) 1.4px, transparent 1.9px);
+	background-size: 96px 108px, 154px 178px;
+	background-position: 12px 8px, 61px 47px;
 }
 
 .p-cta__inner {
@@ -416,18 +570,19 @@ body {
 
 @media (prefers-reduced-motion: no-preference) {
 
-	/* rich: CTA帯に雪が降る */
+	/* rich: CTA帯に雪が降る（3層を別速度で流して奥行きを出す） */
 	.js.motion-rich .p-cta::after {
 		content: "";
 		position: absolute;
-		inset: -30% 0 0;
+		inset: 0;
 		pointer-events: none;
 		background-image:
-			radial-gradient(rgba(255, 255, 255, 0.4) 1.2px, transparent 1.7px),
-			radial-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1.5px);
-		background-size: 110px 110px, 170px 170px;
-		background-position: 0 0, 40px 60px;
-		animation: yuki-fall 22s linear infinite;
+			radial-gradient(rgba(255, 255, 255, 0.50) 1.4px, transparent 2px),
+			radial-gradient(rgba(255, 255, 255, 0.32) 1.1px, transparent 1.6px),
+			radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1.4px);
+		background-size: 210px 130px, 150px 110px, 110px 90px;
+		background-position: 15px 5px, 73px 41px, 34px 68px;
+		animation: yuki-fall 26s linear infinite;
 	}
 
 	/* rich: スクロールに合わせて写真がゆっくり浮上（対応ブラウザのみ） */
@@ -442,7 +597,8 @@ body {
 
 @keyframes yuki-fall {
 	to {
-		transform: translateY(23%);
+		/* 各層のbackground-size縦幅の整数倍だけ流す＝継ぎ目なくループ（層ごとに速度差） */
+		background-position: 15px 785px, 73px 701px, 34px 608px;
 	}
 }
 
