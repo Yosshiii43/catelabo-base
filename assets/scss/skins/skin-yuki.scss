@@ -1,53 +1,50 @@
 @use "../foundation/functions" as *;
+@use "../foundation/mixins" as *;
 
-/* skins/skin-yuki — 雪・静けさ・上品
- * Cattery しろゆき（仮）／ スコティッシュフォールド／ オーナー: 50代女性・丁寧で控えめ
+/* skins/skin-yuki v2 — 雪・静けさ・上品
+ * 推奨プリセット: yuki × hero:minimal × klist:rows（gridも可） × hstyle:bottom × motion:rich
  *
- * 推奨プリセット: yuki × hero:minimal × klist:rows × hstyle:bottom × motion:soft
- * 世界観: 白×ブルーグレー×細明朝×かっちり4px×線の世界
- * 構造(HTML・契約クラス)には触れていない。装飾はトークン＋疑似要素のみ。
+ * v2の狙い: HTMLに触れず、CSSでレイアウトそのものを再構成する。
+ * 縦書きヒーロー／ゴーストタイポ／番号付きセクション／額装写真／
+ * ブラー出現／雪の降るCTA／スクロール連動パララックス
  */
 
-/* ══ 1. トークン再定義（土台） ══ */
+/* ══ 1. トークン ══ */
 
 :root {
-	/* 色 — 青みがかった白と、くすんだブルーグレー */
 	--color-bg:           #F8FAFB;
 	--color-surface:      #FFFFFF;
 	--color-surface-2:    #EEF2F5;
 	--color-ink:          #2E3A42;
 	--color-ink-sub:      #64747F;
-	--color-primary:      #5A7386; /* ボタン・強調（白文字とのコントラスト 4.8:1） */
+	--color-primary:      #5A7386;
 	--color-primary-ink:  #FFFFFF;
-	--color-accent:       #9DB4C6; /* 氷色。罫線的な装飾専用（文字には使わない） */
+	--color-accent:       #9DB4C6;
 	--color-line:         rgba(46, 58, 66, 0.12);
 
 	--color-status-open:  #5A7386;
 	--color-status-talk:  #8A6A38;
 	--color-status-done:  #6B757D;
 
-	/* 書体 — 細めの明朝 */
 	--font-heading: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
 	--font-body:    "Noto Sans JP", sans-serif;
 	--font-note:    "Noto Sans JP", sans-serif;
 
-	/* 形 — かっちり・線の世界 */
-	--radius-xs: 3px;
-	--radius-s:  4px;
-	--radius-m:  6px;
-	--radius-l:  10px;
+	--radius-xs: 2px;
+	--radius-s:  3px;
+	--radius-m:  4px;
+	--radius-l:  6px;
 	--radius-btn: 2px;
 	--shadow-card: none;
 	--border-card: 1px solid var(--color-line);
 
-	/* 寸法 — 余白を広く、静けさをつくる */
-	--container:   1080px;
-	--section-pad: clamp(80px, 11vw, 144px);
+	--container:   1120px;
+	--section-pad: clamp(88px, 12vw, 160px);
 }
 
-/* ══ 2. あしらい（トークンでは表現できない装飾のみ） ══ */
+/* ══ 2. 全体の質感 ══ */
 
-/* 雪 — ごく微かな粉雪のドットを全面に敷く */
+/* 粉雪のドットを全面に */
 body::before {
 	content: "";
 	position: fixed;
@@ -58,82 +55,21 @@ body::before {
 	background-size: 28px 28px;
 }
 
-/* ヘッダー — 白の薄膜。サイト名は広い字間で静かに */
 .p-header {
-	background: rgba(255, 255, 255, 0.88);
+	background: rgba(248, 250, 251, 0.85);
 	backdrop-filter: blur(8px);
+	border-bottom-color: transparent;
 }
 
 .p-header__sitename {
 	font-weight: 500;
 	font-size: rem(17);
-	letter-spacing: 0.24em;
+	letter-spacing: 0.26em;
 }
 
-/* ヒーロー — 小見出しの上に一本の細い縦線を垂らす */
-.p-hero__eyebrow {
-	letter-spacing: 0.32em;
-}
-
-.p-hero__eyebrow::before {
-	content: "";
-	display: block;
-	width: 1px;
-	height: rem(40);
-	background: var(--color-accent);
-	margin: 0 auto rem(24);
-}
-
-.p-hero--minimal .p-hero__eyebrow::before {
-	margin-inline: auto;
-}
-
-.p-hero--split .p-hero__eyebrow::before,
-.p-hero--photo .p-hero__eyebrow::before {
-	margin-inline: 0;
-}
-
-.p-hero__title {
-	font-weight: 500;
-	letter-spacing: 0.1em;
-	line-height: 1.9;
-}
-
-.p-hero__divider {
-	width: rem(64);
-	background: var(--color-accent);
-	opacity: 1;
-}
-
-.p-hero__text {
-	line-height: 2.6;
-	letter-spacing: 0.06em;
-}
-
-/* 見出し — 英字ラベルの字間を空け、氷色に */
-.c-heading__label {
-	letter-spacing: 0.34em;
-	font-weight: 500;
-	color: var(--color-ink-sub);
-}
-
-.c-heading__title {
-	font-weight: 500;
-	letter-spacing: 0.12em;
-}
-
-/* hstyle-bottom の下線を「雪の上の細い足あと」風に細く */
-.hstyle-bottom .p-kitten-detail__section-title::after,
-.hstyle-bottom .p-page__legal-title::after,
-.hstyle-bottom .p-page__content h2::after {
-	height: 1px;
-	background: var(--color-primary);
-}
-
-/* ボタン — 鋭い角、細い枠、静かなホバー */
 .c-btn {
 	font-weight: 500;
-	letter-spacing: 0.14em;
+	letter-spacing: 0.16em;
 }
 
 .c-btn--ghost {
@@ -143,21 +79,260 @@ body::before {
 .c-btn--primary:hover,
 .c-btn--ghost:hover {
 	transform: none;
-	opacity: 0.75;
+	opacity: 0.72;
 }
 
-/* 子猫カード — 線の世界。ホバーは持ち上げず、枠が氷色に灯る */
+/* ══ 3. ヒーロー（minimal）を「縦書きの静けさ」に再構成 ══ */
+
+.p-hero--minimal {
+	border-bottom: none;
+	background: transparent;
+	text-align: left;
+
+	.p-hero__inner {
+		position: relative;
+		display: flex;
+		align-items: center;
+		min-height: min(88svh, rem(860));
+		padding-block: rem(48) rem(72);
+	}
+
+	/* ゴーストタイポ（装飾語。輪郭線だけの大文字を敷く） */
+	.p-hero__inner::before {
+		content: "Cattery";
+		position: absolute;
+		left: -1%;
+		bottom: 2%;
+		z-index: 0;
+		font-family: var(--font-heading);
+		font-size: rclamp(88, 220, 375, 1440);
+		line-height: 1;
+		letter-spacing: 0.04em;
+		color: transparent;
+		-webkit-text-stroke: 1px rgba(157, 180, 198, 0.35);
+		pointer-events: none;
+		white-space: nowrap;
+	}
+
+	.p-hero__body {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.p-hero__eyebrow {
+		letter-spacing: 0.34em;
+		margin-bottom: rem(28);
+	}
+
+	.p-hero__title {
+		font-weight: 500;
+		font-size: rclamp(32, 44, 375, 767);
+		line-height: 2;
+		letter-spacing: 0.22em;
+	}
+
+	.p-hero__divider {
+		display: none;
+	}
+
+	.p-hero__text {
+		line-height: 2.7;
+		letter-spacing: 0.08em;
+		max-width: rem(440);
+		margin-top: rem(24);
+	}
+
+	.p-hero__cta {
+		justify-content: flex-start;
+		margin-top: rem(36);
+	}
+
+	/* タブレット以上：キャッチコピーを縦書きにして右へ、本文は左下へ */
+	@include mq(tab) {
+		.p-hero__body {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			grid-template-rows: auto 1fr auto;
+			column-gap: rem(48);
+		}
+
+		.p-hero__eyebrow {
+			grid-column: 1;
+			grid-row: 1;
+		}
+
+		.p-hero__title {
+			grid-column: 2;
+			grid-row: 1 / span 3;
+			writing-mode: vertical-rl;
+			font-size: rclamp(36, 64, 768, 1440);
+			letter-spacing: 0.32em;
+			max-height: rem(560);
+			margin-left: auto;
+		}
+
+		.p-hero__text {
+			grid-column: 1;
+			grid-row: 2;
+			align-self: end;
+		}
+
+		.p-hero__cta {
+			grid-column: 1;
+			grid-row: 3;
+		}
+	}
+}
+
+/* split / photo を選んだ場合の最低限の上品化 */
+.p-hero--split .p-hero__title,
+.p-hero--photo .p-hero__title {
+	font-weight: 500;
+	letter-spacing: 0.12em;
+	line-height: 1.9;
+}
+
+.p-hero__divider {
+	background: var(--color-accent);
+	opacity: 1;
+}
+
+/* ══ 4. セクション見出しを「番号付きエディトリアル」に ══ */
+
+body {
+	counter-reset: yuki-sec;
+}
+
+.c-heading {
+	counter-increment: yuki-sec;
+	position: relative;
+	text-align: left;
+}
+
+.c-heading__label {
+	display: flex;
+	align-items: center;
+	gap: rem(16);
+	font-weight: 500;
+	letter-spacing: 0.32em;
+	color: var(--color-ink-sub);
+}
+
+.c-heading__label::before {
+	content: "0" counter(yuki-sec);
+	font-family: var(--font-heading);
+	font-size: rem(14);
+	letter-spacing: 0.08em;
+	color: var(--color-primary);
+}
+
+.c-heading__label::after {
+	content: "";
+	width: rem(56);
+	height: 1px;
+	background: var(--color-accent);
+}
+
+.c-heading__title {
+	font-weight: 500;
+	font-size: rclamp(30, 48, 375, 1440);
+	letter-spacing: 0.16em;
+}
+
+/* 見出しの背後に大きな番号を透かす */
+.c-heading::after {
+	content: "0" counter(yuki-sec);
+	position: absolute;
+	right: 0;
+	top: -0.28em;
+	z-index: -1;
+	font-family: var(--font-heading);
+	font-size: rclamp(72, 150, 375, 1440);
+	line-height: 1;
+	color: transparent;
+	-webkit-text-stroke: 1px rgba(157, 180, 198, 0.28);
+	pointer-events: none;
+}
+
+/* hstyle-bottom の下線を極細に */
+.hstyle-bottom .p-kitten-detail__section-title::after,
+.hstyle-bottom .p-page__legal-title::after,
+.hstyle-bottom .p-page__content h2::after {
+	height: 1px;
+	background: var(--color-primary);
+}
+
+/* ══ 5. ごあいさつ：写真を右へ、氷色の額装 ══ */
+
+.p-greeting__inner {
+	@include mq(tab) {
+		grid-template-columns: 55fr 45fr;
+	}
+}
+
+.p-greeting__media {
+	position: relative;
+
+	@include mq(tab) {
+		order: 2;
+	}
+
+	img {
+		border-radius: var(--radius-xs);
+		box-shadow: none;
+	}
+
+	/* ずらした細枠＝額装 */
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-xs);
+		translate: rem(14) rem(14);
+		pointer-events: none;
+	}
+}
+
+.p-greeting__text {
+	line-height: 2.6;
+	letter-spacing: 0.05em;
+}
+
+/* ══ 6. 子猫カード：箱をやめ、写真と余白で見せる ══ */
+
 .p-kitten-card {
-	transition: border-color 0.3s ease;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+	overflow: visible;
+
+	&:hover {
+		transform: none;
+	}
 }
 
-.p-kitten-card:hover {
-	transform: none;
-	border-color: var(--color-accent);
+.p-kitten-card__photo {
+	border-radius: var(--radius-s);
+	overflow: hidden;
+}
+
+.p-kitten-card__img {
+	transition: transform 0.6s cubic-bezier(0.2, 0.65, 0.25, 1);
+}
+
+.p-kitten-card:hover .p-kitten-card__img {
+	transform: scale(1.045);
+}
+
+.p-kitten-card__body {
+	padding: rem(14) rem(2) 0;
 }
 
 .p-kitten-card__breed {
-	letter-spacing: 0.2em;
+	letter-spacing: 0.22em;
 	font-weight: 500;
 }
 
@@ -167,38 +342,123 @@ body::before {
 	letter-spacing: 0.06em;
 }
 
-/* 詳細ページ — ステージ写真の枠線を消し、余白で立たせる */
+/* rows（横長リスト）のとき：罫線だけの静かなリストに */
+.klist-rows .p-kitten-card {
+	border-bottom: 1px solid var(--color-line);
+	padding-block: rem(10) rem(18);
+}
+
+.klist-rows .p-kitten-card__body {
+	padding: rem(4) 0 0 rem(20);
+}
+
+/* ══ 7. 詳細ページ ══ */
+
 .p-kitten-detail__stage {
 	border: none;
 }
 
 .p-kitten-detail__name {
 	font-weight: 500;
-	letter-spacing: 0.08em;
+	letter-spacing: 0.1em;
 }
 
-/* CTA帯 — 濃紺の夜空に一面の粉雪 */
+/* ══ 8. CTA帯：夜空に粉雪 ══ */
+
 .p-cta {
+	position: relative;
+	overflow: hidden;
 	background-color: #33424E;
-	background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1.3px);
-	background-size: 24px 24px;
+	background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1.4px);
+	background-size: 26px 26px;
+}
+
+.p-cta__inner {
+	position: relative;
+	z-index: 1;
+	padding-block: rclamp(72, 112, 375, 1440);
+}
+
+.p-cta__title {
+	font-weight: 500;
+	font-size: rclamp(24, 34, 375, 1440);
+	letter-spacing: 0.2em;
 }
 
 .c-btn--inverse {
 	color: #33424E;
 }
 
-.p-cta__title {
-	font-weight: 500;
-	letter-spacing: 0.14em;
-}
+/* ══ 9. フッター：面を捨てて線一本 ══ */
 
-/* フッター — 面を持たず、一本の線だけで区切る */
 .p-footer {
 	background: transparent;
 }
 
 .p-footer__brand {
 	font-weight: 500;
-	letter-spacing: 0.2em;
+	letter-spacing: 0.24em;
+}
+
+/* ══ 10. モーションの署名（このスキン独自の動き方） ══ */
+
+/* 出現＝雪がほどけるように、ブラーが晴れながら立ち上がる */
+.js.motion-soft .c-reveal,
+.js.motion-rich .c-reveal {
+	transform: translateY(rem(24));
+	filter: blur(7px);
+	transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.65, 0.25, 1), filter 0.9s ease;
+
+	&.is-inview {
+		filter: blur(0);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+	/* rich: CTA帯に雪が降る */
+	.js.motion-rich .p-cta::after {
+		content: "";
+		position: absolute;
+		inset: -30% 0 0;
+		pointer-events: none;
+		background-image:
+			radial-gradient(rgba(255, 255, 255, 0.4) 1.2px, transparent 1.7px),
+			radial-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1.5px);
+		background-size: 110px 110px, 170px 170px;
+		background-position: 0 0, 40px 60px;
+		animation: yuki-fall 22s linear infinite;
+	}
+
+	/* rich: スクロールに合わせて写真がゆっくり浮上（対応ブラウザのみ） */
+	@supports (animation-timeline: view()) {
+		.js.motion-rich .p-greeting__media img {
+			animation: yuki-drift linear both;
+			animation-timeline: view();
+			animation-range: entry 0% cover 55%;
+		}
+	}
+}
+
+@keyframes yuki-fall {
+	to {
+		transform: translateY(23%);
+	}
+}
+
+@keyframes yuki-drift {
+	from {
+		transform: translateY(5%) scale(1.03);
+	}
+	to {
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.js.motion-soft .c-reveal,
+	.js.motion-rich .c-reveal {
+		filter: none;
+		transition: none;
+	}
 }
