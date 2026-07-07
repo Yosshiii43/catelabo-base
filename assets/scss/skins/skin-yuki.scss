@@ -196,7 +196,12 @@ body::before {
 
 	.p-hero__inner {
 		position: relative;
-		min-height: min(88svh, rem(860));
+		padding-block: rem(12) rem(48);
+
+		@include mq(pc) {
+			min-height: min(88svh, rem(860));
+			padding-block: 0;
+		}
 	}
 
 	.p-hero__inner::before {
@@ -232,12 +237,16 @@ body::before {
 		letter-spacing: 0.08em;
 	}
 
-	/* 写真＝縦長・氷色の額装 */
+	/* 写真＝幅を絞った縦長・氷色の額装（SPでも全幅にしない） */
 	.p-hero__media {
 		position: relative;
+		margin-inline: 0;
+		margin-left: auto;
+		width: 76%;
+		max-width: rem(340);
 
 		img {
-			aspect-ratio: 4 / 5;
+			aspect-ratio: 3 / 4;
 			border-radius: var(--radius-xs);
 			box-shadow: none;
 		}
@@ -248,33 +257,56 @@ body::before {
 			inset: 0;
 			border: 1px solid var(--color-accent);
 			border-radius: var(--radius-xs);
-			translate: rem(14) rem(14);
+			translate: rem(12) rem(12);
 			pointer-events: none;
 		}
 	}
 
+	/* SP：縦書きキャッチを写真左の余白に重ねて、ファーストビューに収める */
+	.p-hero__title {
+		position: absolute;
+		top: rem(24);
+		left: max(4vw, rem(8));
+		z-index: 1;
+		writing-mode: vertical-rl;
+		white-space: nowrap;
+		font-weight: 500;
+		font-size: min(#{rclamp(24, 32, 375, 767)}, 4.2svh);
+		letter-spacing: 0.22em;
+		line-height: 1.9;
+	}
+
+	.p-hero__eyebrow {
+		margin-top: rem(20);
+		margin-bottom: rem(12);
+	}
+
+	.p-hero__text {
+		margin-top: rem(8);
+	}
+
 	@include mq(pc) {
+		/* 写真は左・幅をさらに絞る。縦書きキャッチは画面の右端へ */
 		.p-hero__inner {
-			grid-template-columns: 1fr auto;
-			gap: rem(64);
+			grid-template-columns: auto 1fr;
+			gap: rem(72);
 			align-items: center;
 		}
 
-		/* 全画面ブリードをやめ、幅を絞った縦長写真に */
 		.p-hero__media {
-			order: 2;
-			margin-inline: 0;
-			width: min(34vw, rem(440));
+			order: -1;
+			margin-left: 0;
+			width: min(24vw, rem(330));
+			max-width: none;
 			height: auto;
 			min-height: 0;
 
 			img {
-				aspect-ratio: 3 / 4;
+				aspect-ratio: 2 / 3;
 				height: auto;
 			}
 		}
 
-		/* 本文側は minimal と同じ縦書き構成 */
 		.p-hero__body {
 			display: grid;
 			grid-template-columns: 1fr auto;
@@ -286,15 +318,14 @@ body::before {
 		.p-hero__eyebrow {
 			grid-column: 1;
 			grid-row: 1;
+			margin-top: 0;
 		}
 
 		.p-hero__title {
+			position: static;
 			grid-column: 2;
 			grid-row: 1 / span 3;
-			writing-mode: vertical-rl;
-			white-space: nowrap;
 			font-size: min(#{rclamp(32, 52, 1024, 1440)}, 5svh);
-			font-weight: 500;
 			letter-spacing: 0.26em;
 			line-height: 2;
 			margin-left: auto;
@@ -305,6 +336,7 @@ body::before {
 			grid-row: 2;
 			align-self: end;
 			max-width: rem(420);
+			margin-top: 0;
 		}
 
 		.p-hero__cta {
@@ -570,19 +602,22 @@ body {
 
 @media (prefers-reduced-motion: no-preference) {
 
-	/* rich: CTA帯に雪が降る（3層を別速度で流して奥行きを出す） */
+	/* rich: CTA帯に雪が降る（素数系の間隔×5層。層ごとに角度と速度を変え、
+	   グリッドの整列や縦の筋に見えないようにする） */
 	.js.motion-rich .p-cta::after {
 		content: "";
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
 		background-image:
-			radial-gradient(rgba(255, 255, 255, 0.50) 1.4px, transparent 2px),
-			radial-gradient(rgba(255, 255, 255, 0.32) 1.1px, transparent 1.6px),
-			radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1.4px);
-		background-size: 210px 130px, 150px 110px, 110px 90px;
-		background-position: 15px 5px, 73px 41px, 34px 68px;
-		animation: yuki-fall 26s linear infinite;
+			radial-gradient(rgba(255, 255, 255, 0.55) 1.5px, transparent 2.1px),
+			radial-gradient(rgba(255, 255, 255, 0.40) 1.2px, transparent 1.7px),
+			radial-gradient(rgba(255, 255, 255, 0.30) 1.1px, transparent 1.6px),
+			radial-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1.4px),
+			radial-gradient(rgba(255, 255, 255, 0.16) 0.9px, transparent 1.3px);
+		background-size: 173px 289px, 211px 353px, 137px 227px, 101px 179px, 89px 149px;
+		background-position: 11px 7px, 97px 41px, 53px 89px, 29px 131px, 67px 23px;
+		animation: yuki-fall 30s linear infinite;
 	}
 
 	/* rich: スクロールに合わせて写真がゆっくり浮上（対応ブラウザのみ） */
@@ -597,8 +632,9 @@ body {
 
 @keyframes yuki-fall {
 	to {
-		/* 各層のbackground-size縦幅の整数倍だけ流す＝継ぎ目なくループ（層ごとに速度差） */
-		background-position: 15px 785px, 73px 701px, 34px 608px;
+		/* 移動量は各層のbackground-sizeの整数倍＝継ぎ目なくループ。
+		   x方向にも層ごとに違う量を流して斜めに降らせる */
+		background-position: 184px 874px, 97px 747px, 327px 997px, 130px 1026px, 67px 1066px;
 	}
 }
 
