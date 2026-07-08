@@ -230,9 +230,10 @@ body::before {
 	.p-hero__media {
 		grid-column: 1;
 		grid-row: 1;
+		align-self: start;
 		position: relative;
 		width: min(44vw, rem(168));
-		margin-left: rem(-1); /* l-containerのpaddingと合わせて端から20px位置に調整 */
+		margin-left: rem(0.625); /* さらに10px内側 */
 
 		img {
 			aspect-ratio: 1 / 2;
@@ -263,6 +264,7 @@ body::before {
 		line-height: 1.9;
 		align-self: start;
 		justify-self: end;
+		margin-right: rem(0.625); /* さらに10px内側 */
 		padding-top: rem(6);
 	}
 
@@ -309,18 +311,24 @@ body::before {
 			margin-top: 0;
 		}
 
-		/* PC: 写真＝横長11:6・幅440px上限 */
+		/* PC: 写真＝横長11:6・幅440px上限。
+		   グリッド行のstretchで縦に伸びるのを防ぐため align-self: start を明示 */
 		.p-hero__media {
 			grid-column: 1;
 			grid-row: 2;
+			align-self: start;
 			position: relative;
 			z-index: 2;
 			margin-top: rem(28);
 			margin-left: 0;
 			width: min(40vw, rem(440));
+			height: auto;
 
 			img {
+				width: 100%;
+				height: auto;
 				aspect-ratio: 11 / 6;
+				object-fit: cover;
 			}
 
 			&::after {
