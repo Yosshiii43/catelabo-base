@@ -233,7 +233,7 @@ body::before {
 		align-self: start;
 		position: relative;
 		width: min(44vw, rem(168));
-		margin-left: rem(1.375); /* eyebrowの左端より12px右（10px+12px） */
+		margin-left: rem(22); /* eyebrowの左端より12px右（10px+12px = 22px） */
 
 		img {
 			aspect-ratio: 1 / 2;
@@ -264,7 +264,7 @@ body::before {
 		line-height: 1.9;
 		align-self: start;
 		justify-self: end;
-		margin-right: rem(1.375); /* ハンバーガー右端より12px内側（10px+12px） */
+		margin-right: rem(22); /* ハンバーガー右端より12px内側（10px+12px = 22px） */
 		padding-top: rem(6);
 	}
 
