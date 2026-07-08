@@ -196,12 +196,11 @@ body::before {
 
 	.p-hero__inner {
 		position: relative;
-		padding-block: rem(12) rem(48);
-
-		@include mq(pc) {
-			min-height: min(88svh, rem(860));
-			padding-block: 0;
-		}
+		display: grid;
+		grid-template-columns: auto 1fr;
+		column-gap: rem(14);
+		align-items: start;
+		padding-block: rem(16) rem(48);
 	}
 
 	.p-hero__inner::before {
@@ -219,30 +218,30 @@ body::before {
 		white-space: nowrap;
 	}
 
+	/* SP：縦書きキャッチと写真を「横並びのグリッド」に置く。
+	   重ねる方式はやめ、フローで共存させる（原理的に重ならない） */
 	.p-hero__body {
-		/* SPでは縦書きキャッチをinner基準で重ねるため、ここでは位置指定しない */
-		position: static;
+		display: contents;
 	}
 
-	.p-hero__eyebrow {
-		letter-spacing: 0.34em;
+	.p-hero__title {
+		grid-column: 1;
+		grid-row: 1;
+		writing-mode: vertical-rl;
+		white-space: nowrap;
+		font-weight: 500;
+		font-size: min(#{rclamp(23, 30, 375, 767)}, 4.2svh);
+		letter-spacing: 0.2em;
+		line-height: 1.9;
+		padding-top: rem(10);
 	}
 
-	.p-hero__divider {
-		display: none;
-	}
-
-	.p-hero__text {
-		line-height: 2.7;
-		letter-spacing: 0.08em;
-	}
-
-	/* 写真＝幅を絞った縦長・氷色の額装（SPでも全幅にしない） */
 	.p-hero__media {
+		grid-column: 2;
+		grid-row: 1;
 		position: relative;
-		margin-inline: 0;
 		margin-left: auto;
-		width: 76%;
+		width: 100%;
 		max-width: rem(340);
 
 		img {
@@ -262,69 +261,63 @@ body::before {
 		}
 	}
 
-	/* SP：縦書きキャッチを写真左の余白に重ねて、ファーストビューに収める */
-	.p-hero__title {
-		position: absolute;
-		top: rem(24);
-		left: max(4vw, rem(8));
-		z-index: 1;
-		writing-mode: vertical-rl;
-		white-space: nowrap;
-		font-weight: 500;
-		font-size: min(#{rclamp(24, 32, 375, 767)}, 4.2svh);
-		letter-spacing: 0.22em;
-		line-height: 1.9;
+	.p-hero__eyebrow {
+		grid-column: 1 / -1;
+		grid-row: 2;
+		letter-spacing: 0.34em;
+		margin-top: rem(26);
 	}
 
-	.p-hero__eyebrow {
-		margin-top: rem(20);
-		margin-bottom: rem(12);
+	.p-hero__divider {
+		display: none;
 	}
 
 	.p-hero__text {
+		grid-column: 1 / -1;
+		grid-row: 3;
+		line-height: 2.7;
+		letter-spacing: 0.08em;
 		margin-top: rem(8);
 	}
 
+	.p-hero__cta {
+		grid-column: 1 / -1;
+		grid-row: 4;
+	}
+
 	@include mq(pc) {
-		/* 写真は左・小さく・下端へ沈める。縦書きキャッチは画面の右端へ。
-		   ゴーストタイポが写真の上を横切る＝レイヤーの重なりで現代性を出す */
+		/* 本文ブロックは横幅いっぱい。写真は左中段（小見出しとリード文の間の高さ）に浮かべ、
+		   ゴーストタイポが写真の上を横切る */
 		.p-hero__inner {
-			grid-template-columns: auto 1fr;
-			gap: rem(72);
-			align-items: stretch;
+			display: grid;
+			grid-template-columns: 1fr;
+			min-height: min(88svh, rem(860));
+			padding-block: rem(56);
 		}
 
 		.p-hero__inner::before {
 			z-index: 1;
 		}
 
-		.p-hero__body {
-			position: relative;
-			z-index: 2;
-		}
-
 		.p-hero__media {
-			order: -1;
-			margin-left: 0;
-			align-self: end;
-			margin-bottom: rem(48);
-			width: min(18vw, rem(250));
+			grid-column: auto;
+			grid-row: auto;
+			position: absolute;
+			left: 0;
+			top: 52%;
+			translate: 0 -52%;
+			margin: 0;
+			width: min(17vw, rem(240));
 			max-width: none;
-			height: auto;
-			min-height: 0;
-
-			img {
-				aspect-ratio: 3 / 4;
-				height: auto;
-			}
 		}
 
 		.p-hero__body {
 			display: grid;
+			position: relative;
+			z-index: 2;
 			grid-template-columns: 1fr auto;
 			grid-template-rows: auto 1fr auto;
 			column-gap: rem(48);
-			padding-block: rem(64);
 		}
 
 		.p-hero__eyebrow {
@@ -334,20 +327,22 @@ body::before {
 		}
 
 		.p-hero__title {
-			position: static;
 			grid-column: 2;
 			grid-row: 1 / span 3;
 			font-size: min(#{rclamp(32, 52, 1024, 1440)}, 5svh);
 			letter-spacing: 0.26em;
 			line-height: 2;
 			margin-left: auto;
+			padding-top: 0;
 		}
 
+		/* リード文とボタンは、写真と重ならないよう右へ逃がす */
 		.p-hero__text {
 			grid-column: 1;
 			grid-row: 2;
 			align-self: end;
 			max-width: rem(420);
+			margin-left: min(21vw, rem(300));
 			margin-top: 0;
 		}
 
@@ -355,6 +350,7 @@ body::before {
 			grid-column: 1;
 			grid-row: 3;
 			justify-content: flex-start;
+			margin-left: min(21vw, rem(300));
 		}
 	}
 }
