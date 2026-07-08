@@ -294,11 +294,13 @@ body::before {
 	@include mq(pc) {
 		.p-hero__inner {
 			grid-template-columns: 1fr auto;
-			grid-template-rows: auto auto auto auto;
+			/* 4行目(ボタン)の下に伸縮する余白行を追加し、そこだけが伸びるようにする。
+			   align-contentのcenterをやめ、常に上端固定にする */
+			grid-template-rows: auto auto auto auto 1fr;
 			gap: 0 rem(56);
 			min-height: min(88svh, rem(860));
-			padding-block: rem(56);
-			align-content: center;
+			padding-block: rem(56) 0;
+			align-content: start;
 		}
 
 		.p-hero__inner::before {
