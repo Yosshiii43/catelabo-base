@@ -189,15 +189,18 @@ body::before {
 }
 
 /* ── split を選んだ場合：額装写真×縦書きキャッチ ──
- * PC: 左カラム（タグライン→写真→リード文→ボタン）＋ 右端に縦書きキャッチ
- * SP: 上段グリッド（左:写真 / 右:縦書き）→ 下にタグライン→テキスト→ボタン */
+ * PC: 左カラム（タグライン→横長写真11:6→リード文→ボタン）＋ 右端に縦書き
+ * SP: 上段グリッド（左:縦長写真1:2 / 右:縦書き）→ 下にテキスト（gap極小） */
 .p-hero--split {
 	background: transparent;
 	border-bottom: none;
 
 	.p-hero__inner {
 		position: relative;
-		padding-block: rem(16) rem(48);
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: rem(1); /* SP: 要素間を詰めてファーストビューに収める */
+		padding-block: rem(12) rem(32);
 	}
 
 	.p-hero__inner::before {
@@ -219,26 +222,20 @@ body::before {
 		display: none;
 	}
 
-	/* SP: 上段を写真+縦書きの横並びに */
 	.p-hero__body {
 		display: contents;
 	}
 
-	.p-hero__inner {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		grid-template-rows: auto auto auto auto;
-		column-gap: rem(12);
-	}
-
+	/* SP: 写真＝縦長1:2・幅を絞りウィンドウ端から20px内側 */
 	.p-hero__media {
 		grid-column: 1;
 		grid-row: 1;
 		position: relative;
-		width: 100%;
+		width: min(44vw, rem(168));
+		margin-left: rem(-1); /* l-containerのpaddingと合わせて端から20px位置に調整 */
 
 		img {
-			aspect-ratio: 3 / 4;
+			aspect-ratio: 1 / 2;
 			border-radius: var(--radius-xs);
 			box-shadow: none;
 		}
@@ -249,50 +246,54 @@ body::before {
 			inset: 0;
 			border: 1px solid var(--color-accent);
 			border-radius: var(--radius-xs);
-			translate: rem(10) rem(10);
+			translate: rem(8) rem(8);
 			pointer-events: none;
 		}
 	}
 
+	/* SP: 縦書きキャッチを写真の右に */
 	.p-hero__title {
 		grid-column: 2;
 		grid-row: 1;
 		writing-mode: vertical-rl;
 		white-space: nowrap;
 		font-weight: 500;
-		font-size: min(#{rclamp(22, 28, 375, 767)}, 4svh);
+		font-size: min(#{rclamp(20, 26, 375, 767)}, 3.6svh);
 		letter-spacing: 0.2em;
 		line-height: 1.9;
 		align-self: start;
-		padding-top: rem(8);
+		justify-self: end;
+		padding-top: rem(6);
 	}
 
 	.p-hero__eyebrow {
 		grid-column: 1 / -1;
 		grid-row: 2;
 		letter-spacing: 0.34em;
-		margin-top: rem(28);
+		margin-top: rem(16);
 	}
 
 	.p-hero__text {
 		grid-column: 1 / -1;
 		grid-row: 3;
-		line-height: 2.7;
-		letter-spacing: 0.08em;
-		margin-top: rem(16);
+		line-height: 2.4;
+		letter-spacing: 0.06em;
+		margin-top: rem(8);
+		font-size: rem(14);
 	}
 
 	.p-hero__cta {
 		grid-column: 1 / -1;
 		grid-row: 4;
+		margin-top: rem(12);
 	}
 
-	/* PC: 左カラム（タグライン→写真→テキスト→ボタン）＋ 右端に縦書き */
+	/* ── PC ── */
 	@include mq(pc) {
 		.p-hero__inner {
 			grid-template-columns: 1fr auto;
 			grid-template-rows: auto auto auto auto;
-			column-gap: rem(56);
+			gap: 0 rem(56);
 			min-height: min(88svh, rem(860));
 			padding-block: rem(56);
 			align-content: center;
@@ -308,16 +309,18 @@ body::before {
 			margin-top: 0;
 		}
 
+		/* PC: 写真＝横長11:6・幅440px上限 */
 		.p-hero__media {
 			grid-column: 1;
 			grid-row: 2;
 			position: relative;
 			z-index: 2;
 			margin-top: rem(28);
-			width: min(42vw, rem(520));
+			margin-left: 0;
+			width: min(40vw, rem(440));
 
 			img {
-				aspect-ratio: 4 / 3;
+				aspect-ratio: 11 / 6;
 			}
 
 			&::after {
@@ -334,6 +337,7 @@ body::before {
 			letter-spacing: 0.26em;
 			line-height: 2;
 			align-self: start;
+			justify-self: end;
 			padding-top: rem(24);
 		}
 
@@ -342,12 +346,14 @@ body::before {
 			grid-row: 3;
 			max-width: rem(460);
 			margin-top: rem(28);
+			font-size: rem(15.5);
 		}
 
 		.p-hero__cta {
 			grid-column: 1;
 			grid-row: 4;
 			justify-content: flex-start;
+			margin-top: rem(20);
 		}
 	}
 }
