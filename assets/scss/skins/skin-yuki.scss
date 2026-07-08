@@ -233,7 +233,7 @@ body::before {
 		align-self: start;
 		position: relative;
 		width: min(44vw, rem(168));
-		margin-left: rem(0.625); /* さらに10px内側 */
+		margin-left: rem(1.375); /* eyebrowの左端より12px右（10px+12px） */
 
 		img {
 			aspect-ratio: 1 / 2;
@@ -264,7 +264,7 @@ body::before {
 		line-height: 1.9;
 		align-self: start;
 		justify-self: end;
-		margin-right: rem(0.625); /* さらに10px内側 */
+		margin-right: rem(1.375); /* ハンバーガー右端より12px内側（10px+12px） */
 		padding-top: rem(6);
 	}
 
@@ -272,7 +272,7 @@ body::before {
 		grid-column: 1 / -1;
 		grid-row: 2;
 		letter-spacing: 0.34em;
-		margin-top: rem(16);
+		margin-top: rem(64); /* 画像との間を大きく空ける */
 	}
 
 	.p-hero__text {
@@ -323,6 +323,9 @@ body::before {
 			margin-left: 0;
 			width: min(40vw, rem(440));
 			height: auto;
+			/* ベース(_p-hero.scss)が min-height: calc(100svh - 4.5rem) を
+			   同セレクタに残しており、それが優先されて縦長化していた。ここで明示的に解除する */
+			min-height: 0;
 
 			img {
 				width: 100%;
