@@ -294,12 +294,12 @@ body::before {
 	@include mq(pc) {
 		.p-hero__inner {
 			grid-template-columns: 1fr auto;
-			/* 4行目(ボタン)の下に伸縮する余白行を追加し、そこだけが伸びるようにする。
-			   align-contentのcenterをやめ、常に上端固定にする */
-			grid-template-rows: auto auto auto auto 1fr;
+			/* 行構成: 1=タグライン 2=写真 3=伸縮する余白 4=リード文 5=ボタン。
+			   写真の直後にだけ伸びる余白を挟み、タグライン・写真・キャッチは常に上端固定にする */
+			grid-template-rows: auto auto 1fr auto auto;
 			gap: 0 rem(56);
 			min-height: min(88svh, rem(860));
-			padding-block: rem(56) 0;
+			padding-block: rem(56);
 			align-content: start;
 		}
 
@@ -313,12 +313,14 @@ body::before {
 			margin-top: 0;
 		}
 
+		/* row3は伸縮する余白専用（写真の直後・リード文の手前） */
+
 		/* PC: 写真＝横長11:6・幅440px上限。
-		   グリッド行のstretchで縦に伸びるのを防ぐため align-self: start を明示 */
+		   グリッド行のstretchで縦に伸びるのを防ぐため align-self: end を明示 */
 		.p-hero__media {
 			grid-column: 1;
-			grid-row: 2;
-			align-self: start;
+			grid-row: 3;
+			align-self: end;
 			position: relative;
 			z-index: 2;
 			margin-top: rem(28);
@@ -343,7 +345,7 @@ body::before {
 
 		.p-hero__title {
 			grid-column: 2;
-			grid-row: 1 / span 4;
+			grid-row: 1 / span 5;
 			position: relative;
 			z-index: 2;
 			font-size: min(#{rclamp(34, 56, 1024, 1440)}, 5svh);
@@ -356,7 +358,7 @@ body::before {
 
 		.p-hero__text {
 			grid-column: 1;
-			grid-row: 3;
+			grid-row: 4;
 			max-width: rem(460);
 			margin-top: rem(28);
 			font-size: rem(15.5);
@@ -364,7 +366,7 @@ body::before {
 
 		.p-hero__cta {
 			grid-column: 1;
-			grid-row: 4;
+			grid-row: 5;
 			justify-content: flex-start;
 			margin-top: rem(20);
 		}
