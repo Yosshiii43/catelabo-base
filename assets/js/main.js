@@ -82,6 +82,27 @@
 })();
 
 /**
+ * ヒーロー写真の上にヘッダーが重なる間だけ .is-over-photo を付与
+ * skin-nostalgia が利用（ink ↔ on-photo カラー切替）
+ */
+(function () {
+	'use strict';
+
+	var hero   = document.querySelector('.p-hero--photo');
+	var header = document.querySelector('.p-header');
+	if (!hero || !header) { return; }
+
+	/* 初回ロード時の一瞬を防ぐため先に付与し、IO が訂正する */
+	header.classList.add('is-over-photo');
+
+	var io = new IntersectionObserver(function (entries) {
+		header.classList.toggle('is-over-photo', entries[0].isIntersecting);
+	}, { threshold: 0 });
+
+	io.observe(hero);
+})();
+
+/**
  * スクロール出現モーション（c-reveal）
  * bodyの motion-soft / motion-rich のときだけ動く（クラス付与はheader.phpのインラインJS）
  */

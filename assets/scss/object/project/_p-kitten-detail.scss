@@ -84,7 +84,7 @@
 	&__breed {
 		font-family: var(--font-note);
 		font-size: rem(13);
-		font-weight: 700;
+		font-weight: 500;
 		letter-spacing: 0.1em;
 		color: var(--color-primary);
 		margin-bottom: rem(6);
@@ -105,7 +105,7 @@
 
 		dt {
 			font-family: var(--font-note);
-			font-weight: 700;
+			font-weight: 500;
 			font-size: rem(13);
 			color: var(--color-ink-sub);
 			padding-top: rem(1);
@@ -114,7 +114,7 @@
 
 	&__age {
 		color: var(--color-primary);
-		font-weight: 700;
+		font-weight: 500;
 	}
 
 	&__health {
@@ -157,7 +157,7 @@
 
 		a {
 			color: var(--color-primary);
-			font-weight: 700;
+			font-weight: 500;
 		}
 	}
 

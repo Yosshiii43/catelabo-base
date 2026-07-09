@@ -125,4 +125,6 @@ while ( have_posts() ) :
 	<?php
 endwhile;
 
+get_template_part( 'template-parts/cta' );
+
 get_footer();

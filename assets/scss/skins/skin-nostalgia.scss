@@ -1,0 +1,502 @@
+@use "../foundation/functions" as *;
+@use "../foundation/mixins" as *;
+
+/* skins/skin-nostalgia v3 — ノスタルジー・柔らか・淡い
+ * 推奨プリセット: nostalgia × hero:photo × klist:grid × hstyle:plain × motion:soft
+ *
+ * 「霞の記憶」: ラベンダーとシャーベットピンクが交差するフォト・ポエム。
+ * 透明ヘッダー×全画面フォトヒーロー / タイトル右下スクリプト見出し /
+ * 影の白台紙カード / シャーベットグラデCTA
+ */
+
+/* ══ 1. トークン ══ */
+
+:root {
+	--color-bg:           #f0eaf5;
+	--color-surface:      #fdfaff;
+	--color-surface-2:    #ede5f3;
+	--color-ink:          #2d2a3e;
+	--color-ink-sub:      #7068a0;
+	--color-primary:      #6e6398;
+	--color-primary-ink:  #ffffff;
+	--color-accent:       #f5c8d8;
+	--color-line:         rgba(45, 42, 62, 0.10);
+	--color-on-photo:     #fdeef5;
+
+	--color-status-open:  #6d6aab;
+	--color-status-talk:  #8a7048;
+	--color-status-done:  #6e6a82;
+
+	--font-heading: "Zen Old Mincho", "Hiragino Mincho ProN", serif;
+	--font-body:    "Noto Sans JP", sans-serif;
+	--font-note:    "EB Garamond", "Georgia", serif;
+
+	--radius-xs: 4px;
+	--radius-s:  8px;
+	--radius-m:  12px;
+	--radius-l:  20px;
+	--radius-btn: 8px;
+	--shadow-card: 0 4px 28px -6px rgba(45, 42, 62, 0.14), 0 1px 6px -1px rgba(45, 42, 62, 0.07);
+	--border-card: none;
+
+	--container:   1120px;
+	--section-pad: clamp(72px, 10vw, 130px);
+}
+
+/* ══ 2. ヘッダー：透明・ヒーロー写真の上に浮かせる ══
+ *
+ * ベース: position:sticky; top:0; z-index:20;
+ *         background:var(--color-surface); border-bottom:1px solid var(--color-line)
+ *
+ * → 完全透明化。サブページでは--color-bg(淡ラベンダー)の上にdark-ink乗る(14:1 ✓)
+ * → navとサイト名をZen Old Mincho で統一
+ * → p-header__cta（PHPテンプレート出力のc-btn--primary）を
+ *   ナビリンクと同一デザインに変換（HTML変更なし）
+ */
+
+/* デフォルト：フロスト（サブページ・スクロール後）
+ * p-hero__title と同質のすりガラス。背景はラベンダー霞 */
+.p-header {
+	background: rgba(240, 234, 245, 0.82);
+	backdrop-filter: blur(14px) saturate(1.10);
+	-webkit-backdrop-filter: blur(14px) saturate(1.10);
+	border-bottom-color: rgba(45, 42, 62, 0.08);
+	transition: background 0.35s ease, border-bottom-color 0.35s ease;
+}
+
+.p-header__sitename {
+	font-weight: 500;
+	font-size: rem(16);
+	letter-spacing: 0.28em;
+}
+
+.p-header__menu a {
+	font-family: var(--font-heading);
+	font-weight: 400;
+	letter-spacing: 0.18em;
+	color: var(--color-ink);
+	transition: color 0.35s ease;
+}
+
+/* CTA ボタン → nav リンクと同等のテキストリンクに変換 */
+.p-header__cta {
+	background: transparent;
+	box-shadow: none;
+	color: var(--color-ink);
+	font-family: var(--font-heading);
+	font-weight: 400;
+	font-size: rem(14.5);
+	letter-spacing: 0.18em;
+	padding: calc(var(--space) * 0.5) 0;
+	border-radius: 0;
+	transition: color 0.35s ease;
+
+	&:hover {
+		transform: none;
+		opacity: 0.60;
+	}
+
+	@include mq(sp) {
+		display: block;
+		width: 100%;
+		text-align: left;
+		padding: calc(var(--space) * 1.25) 0;
+		border-bottom: 1px solid var(--color-line);
+		justify-content: flex-start;
+	}
+}
+
+.p-header__toggle-bar,
+.p-header__toggle-bar::before,
+.p-header__toggle-bar::after {
+	transition: background 0.35s ease, transform 0.25s ease, opacity 0.2s ease;
+}
+
+/* .p-hero--photo 表示中のみ JS が付与 → 透明ヘッダー + on-photo カラー */
+.p-header.is-over-photo {
+	background: transparent;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+	border-bottom-color: transparent;
+
+	.p-header__sitename,
+	.p-header__menu a,
+	.p-header__cta { color: var(--color-on-photo); }
+
+	.p-header__toggle-bar,
+	.p-header__toggle-bar::before,
+	.p-header__toggle-bar::after { background: var(--color-on-photo); }
+}
+
+/* ══ 3. ヒーロー（photo）：霞の記憶 ══
+ *
+ * z 構成: ::before(霧overlay)=z0, .p-hero__inner grid=z1, frosted-glass-title=z1(grid内)
+ *
+ * ベース確認:
+ *   l-main は top:64px (sticky header 直下) から始まる
+ *   .p-hero--photo { display:flex; align-items:flex-end;
+ *                    min-height:rclamp(440,640,375,1440); position:relative; }
+ *   .p-hero--photo::before { position:absolute; inset:0;
+ *     background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.05) 55%) }
+ *   .p-hero__inner { position:relative; width:100%;
+ *                    padding-block:rclamp(36,64,375,1440) }
+ *
+ * → margin-top:-64px で hero を y=0（ウィンドウ最上部）まで引き上げる
+ *   min-height:100svh と合わせて「透明ヘッダー＋全画面写真」を実現
+ * → ::before の黒グラデを霞グラデに差し替え
+ * → tab+: p-hero__inner グリッド化・p-hero__body display:contents で解体
+ *   （眉=row1、縦書きタイトル=col2全行、リード=row3、CTA=row4）
+ */
+
+.p-hero--photo {
+	margin-top: rem(-64); /* ← header 高さ分(64px)引き上げて y=0 から開始 */
+	min-height: 100svh;
+
+	&::before {
+		background: linear-gradient(
+			to top,
+			rgba(45, 42, 62, 0.65) 0%,
+			rgba(45, 42, 62, 0.22) 50%,
+			rgba(240, 234, 245, 0.10) 100%
+		);
+	}
+
+	/* SP: 上は header 分を確保、下は読みやすい余白 */
+	.p-hero__inner {
+		padding-block: rem(88) rem(56);
+	}
+
+	.p-hero__title {
+		font-weight: 400;
+		letter-spacing: 0.14em;
+		line-height: 1.9;
+		text-shadow: 0 1px 14px rgba(45, 42, 62, 0.50);
+	}
+
+	.p-hero__eyebrow {
+		text-shadow: 0 1px 8px rgba(45, 42, 62, 0.55);
+	}
+
+	.p-hero__divider {
+		display: none;
+	}
+
+	.p-hero__cta {
+		margin-top: rem(28);
+	}
+
+	/* ── tab+ : グリッド再構成 ──
+	 * eyebrow の padding-top は「header高さ(64px) + 余白(18px)」= rem(82) に増量
+	 * frosted-title の padding-top も同様 rem(70) に増量
+	 */
+	@include mq(tab) {
+		align-items: stretch;
+
+		.p-hero__inner {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			grid-template-rows: auto 1fr auto auto;
+			padding-block: 0;
+		}
+
+		.p-hero__body {
+			display: contents;
+		}
+
+		.p-hero__eyebrow {
+			grid-column: 1;
+			grid-row: 1;
+			align-self: start;
+			padding-top: rem(82); /* header 64px + 18px */
+			padding-left: rem(8);
+		}
+
+		/* frosted-glass縦書きタイトル
+		 * 落とし穴§2対応: align-self:stretch を明示
+		 * 落とし穴§6対応: white-space:nowrap + svhで高さ連動
+		 */
+		.p-hero__title {
+			grid-column: 2;
+			grid-row: 1 / span 4;
+			align-self: stretch;
+			writing-mode: vertical-rl;
+			white-space: nowrap;
+			font-size: min(#{rclamp(24, 44, 768, 1440)}, 4.6svh);
+			letter-spacing: 0.28em;
+			line-height: 2;
+			padding: rem(92) rem(26) rem(40); /* top:ヘッダー(64px)+余白(28px) */
+			background: rgba(240, 234, 245, 0.14);
+			backdrop-filter: blur(16px) saturate(1.08);
+			-webkit-backdrop-filter: blur(16px) saturate(1.08);
+			text-shadow: 0 1px 18px rgba(45, 42, 62, 0.52);
+		}
+
+		.p-hero__text {
+			grid-column: 1;
+			grid-row: 3;
+			align-self: end;
+			max-width: rem(440);
+			line-height: 2.4;
+			padding-left: rem(8);
+			padding-right: rem(36);
+		}
+
+		.p-hero__cta {
+			grid-column: 1;
+			grid-row: 4;
+			justify-content: flex-start;
+			padding-left: rem(8);
+			padding-right: rem(36);
+			padding-bottom: rem(56);
+			margin-top: rem(16);
+		}
+	}
+}
+
+/* ══ 4. セクション見出し：__label をタイトル右下に重ねる ══
+ *
+ * DOM順は label→title だが grid-template-areas で視覚上逆転。
+ * width:fit-content でコンテナ幅 = max(title幅, label幅) となり
+ * ラベルがフロー内にあることで SP でも画面外にはみ出さない。
+ * justify-self:end + margin-top:-0.5em でタイトル右下端に重なる。
+ * text-transform:capitalize で "contact"→"Contact" の表記を統一。
+ * font-size は rclamp で SP 時も見出しに比例して縮小する。
+ */
+
+.c-heading {
+	display: grid;
+	grid-template-areas: "title" "label";
+	width: fit-content;
+	text-align: left;
+	padding-left: 0;
+	overflow: visible;
+
+	&::before { display: none; }
+}
+
+.c-heading__label {
+	grid-area: label;
+	justify-self: end;              /* グリッド幅（= max）の右端へ */
+	margin-top: -1em;               /* ラベル自身の em → SP・PC ともに比例 */
+	margin-bottom: 0;
+	transform: rotate(-5deg);
+	transform-origin: right bottom;
+	font-family: "Dancing Script", cursive;
+	font-size: rclamp(20, 30, 375, 1440); /* 見出しに比例して縮小 */
+	font-weight: 500;
+	font-style: normal;
+	letter-spacing: 0.01em;
+	text-transform: capitalize;     /* "contact"→"Contact" に統一 */
+	color: rgba(110, 100, 152, 0.45);
+	white-space: nowrap;
+	pointer-events: none;
+}
+
+.c-heading__title {
+	grid-area: title;
+	font-family: var(--font-heading);
+	font-weight: 500;
+	font-size: rclamp(22, 36, 375, 1440);
+	letter-spacing: 0.16em;
+	line-height: 1.7;
+	padding-right: 1em; /* これにより grid 幅が 1em 広がり label が右側にはみ出す */
+}
+
+/* ══ 5. ごあいさつ：写真右・薄ピンク額装 ══
+ *
+ * ベース: grid-template-columns:42fr 58fr (tab+)
+ * → 反転して写真を右に
+ */
+
+.p-greeting__inner {
+	@include mq(tab) {
+		grid-template-columns: 58fr 42fr;
+	}
+}
+
+.p-greeting__media {
+	position: relative;
+
+	@include mq(tab) {
+		order: 2;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border: 1px solid rgba(245, 200, 216, 0.70);
+		border-radius: var(--radius-m);
+		translate: rem(10) rem(10);
+		pointer-events: none;
+	}
+}
+
+.p-greeting__text {
+	line-height: 2.6;
+	letter-spacing: 0.04em;
+}
+
+/* ══ 6. 子猫カード：影の白い台紙 ══
+ *
+ * ベース確認:
+ *   .p-kitten-card { background:var(--color-surface); border:var(--border-card);
+ *                    border-radius:var(--radius-m); box-shadow:var(--shadow-card);
+ *                    overflow:hidden; transition:transform 0.25s ease }
+ *   :hover { transform:translateY(rem(-4)) }
+ * → --border-card:none / --shadow-card はトークンで解決済み
+ * → overflow:visible で影をはみ出す。__photo で overflow:hidden を保持
+ */
+
+.p-kitten-card {
+	overflow: visible;
+	transition: transform 0.42s cubic-bezier(0.2, 0.65, 0.25, 1),
+	            box-shadow 0.42s ease;
+
+	&:hover {
+		transform: translateY(rem(-6));
+		box-shadow: 0 12px 40px -8px rgba(45, 42, 62, 0.20),
+		            0 2px 10px -2px rgba(45, 42, 62, 0.09);
+	}
+}
+
+.p-kitten-card__photo {
+	border-radius: var(--radius-m);
+	overflow: hidden;
+}
+
+.p-kitten-card__img {
+	transition: filter 0.5s ease;
+}
+
+.p-kitten-card:hover .p-kitten-card__img {
+	filter: saturate(1.10) brightness(1.03);
+}
+
+.p-kitten-card__body {
+	padding-bottom: rem(24); /* 台紙の下余白 */
+}
+
+.p-kitten-card__breed {
+	font-family: var(--font-note);
+	font-size: rem(11.5);
+	letter-spacing: 0.28em;
+	font-weight: 400;
+}
+
+.p-kitten-card__name {
+	font-family: var(--font-heading);
+	font-weight: 500;
+	letter-spacing: 0.08em;
+}
+
+/* ══ 7. CTA帯：シャーベットの夕暮れグラデーション ══
+ *
+ * ベース: background:var(--color-primary); color:var(--color-primary-ink)
+ * → ラベンダー→淡ピンクのグラデ帯に差し替え
+ *   コントラスト: #2d2a3e on グラデ中点(#e2ccdc) → 10.3:1 ✓
+ *   CTAボタン: #fdfaff on #2d2a3e → 16.2:1 ✓
+ */
+
+.p-cta {
+	background: linear-gradient(
+		135deg,
+		#d8d0ea 0%,
+		#e2ccdc 45%,
+		#eecad4 100%
+	);
+	color: #2d2a3e;
+
+	&__inner {
+		padding-block: rclamp(72, 110, 375, 1440);
+	}
+
+	&__title {
+		font-family: var(--font-heading);
+		font-weight: 400;
+		font-size: rclamp(22, 34, 375, 1440);
+		color: #2d2a3e;
+
+		/* PC のみ広いトラッキング。SP は base の 0.08em が適用される */
+		@include mq(tab) {
+			letter-spacing: 0.22em;
+		}
+	}
+
+	&__text {
+		color: rgba(45, 42, 62, 0.72);
+	}
+}
+
+.p-cta .c-btn--primary {
+	background: #2d2a3e;
+	color: #fdfaff;
+}
+
+.p-cta .c-btn--inverse {
+	background: rgba(253, 250, 255, 0.88);
+	color: #2d2a3e;
+}
+
+/* ══ 8. フッター：霞色の余韻 ══
+ * ベース: background:var(--color-surface); border-top:1px solid var(--color-line)
+ */
+
+.p-footer {
+	background: rgba(240, 234, 245, 0.50);
+	border-top-color: rgba(45, 42, 62, 0.08);
+}
+
+.p-footer__brand {
+	font-weight: 400;
+	letter-spacing: 0.24em;
+}
+
+/* ══ 9. 詳細・固定ページの見出し：重さより大きさでメリハリ ══
+ *
+ * ベース確認:
+ *   .p-kitten-detail__section-title, .p-page__legal-title { font-size:rem(18) }
+ *   .p-page__content h2 { font-size:rem(20) }
+ *   font-weight の明示なし → ブラウザデフォルト 700
+ * → 400 に落とし Zen Old Mincho の細い線質で品を出す。+2px で存在感を確保
+ */
+
+.p-kitten-detail__section-title,
+.p-page__legal-title {
+	font-weight: 400;
+	font-size: rem(20);
+	letter-spacing: 0.12em;
+}
+
+.p-page__content h2 {
+	font-weight: 400;
+	font-size: rem(22);
+	letter-spacing: 0.12em;
+}
+
+/* ══ 10. モーションの署名 ══
+ *
+ * 出現＝記憶がやわらかく浮かびあがる。Y軸 + opacity のみ（blur なし—yukiと差別化）
+ * ベース(_c-reveal.scss)の translateY/transition を上書き。
+ * is-inview { opacity:1; transform:none } はベースが保持。
+ */
+
+.js.motion-soft .c-reveal,
+.js.motion-rich .c-reveal {
+	transform: translateY(rem(20));
+	transition: opacity 0.85s ease-out,
+	            transform 0.85s cubic-bezier(0.18, 0.68, 0.22, 1);
+}
+
+.js.motion-rich .c-reveal {
+	transform: translateY(rem(28));
+	transition-duration: 1.0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.js.motion-soft .c-reveal,
+	.js.motion-rich .c-reveal {
+		transform: none;
+		transition: none;
+	}
+}

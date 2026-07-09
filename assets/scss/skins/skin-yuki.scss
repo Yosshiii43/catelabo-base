@@ -593,8 +593,11 @@ body {
 
 .p-cta__title {
 	font-weight: 500;
-	font-size: rclamp(24, 34, 375, 1440);
-	letter-spacing: 0.2em;
+	font-size: rclamp(22, 34, 375, 1440);
+
+	@include mq(tab) {
+		letter-spacing: 0.2em;
+	}
 }
 
 .c-btn--inverse {

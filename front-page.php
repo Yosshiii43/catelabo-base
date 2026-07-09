@@ -102,15 +102,6 @@ $greet_image = get_theme_mod( 'catelabo_greeting_image', '' );
 	</div>
 </section>
 
-<!-- CTA帯 -->
-<?php if ( $cta_url ) : ?>
-	<section class="p-cta">
-		<div class="l-container p-cta__inner c-reveal">
-			<h2 class="p-cta__title">見学のご相談・お問い合わせ</h2>
-			<p class="p-cta__text">気になる子がいましたら、お気軽にご連絡ください。</p>
-			<a class="c-btn c-btn--inverse" href="<?php echo esc_url( $cta_url ); ?>"><?php echo esc_html( $cta_label ); ?></a>
-		</div>
-	</section>
-<?php endif; ?>
+<?php get_template_part( 'template-parts/cta' ); ?>
 
 <?php get_footer(); ?>

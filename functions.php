@@ -28,7 +28,11 @@ function catelabo_base_skins() {
     'yuki' => array(
       'label'        => '雪（白×ブルーグレー）',
       'google_fonts' => 'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&display=swap',
-  ),
+    ),
+    'nostalgia' => array(
+      'label'        => 'ノスタルジー（ラベンダー×淡ピンク）',
+      'google_fonts' => 'https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@500&family=Noto+Sans+JP:wght@400;500&display=swap',
+    ),
 	);
 	return apply_filters( 'catelabo_base_skins', $skins );
 }
@@ -140,6 +144,26 @@ add_action( 'customize_register', function ( $wp_customize ) {
 		'description' => '空欄の場合はスラッグ contact のページへ自動リンクします。LINEに飛ばす場合はURLを入れ、文言に「LINE」を含めてください（例：LINEで相談）。',
 		'section'     => 'catelabo_settings',
 		'type'        => 'url',
+	) );
+
+	// CTA帯 見出し・本文
+	$wp_customize->add_setting( 'catelabo_cta_section_title', array(
+		'default'           => '見学のご相談・お問い合わせ',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'catelabo_cta_section_title', array(
+		'label'   => 'CTA帯の見出し',
+		'section' => 'catelabo_settings',
+		'type'    => 'text',
+	) );
+	$wp_customize->add_setting( 'catelabo_cta_section_text', array(
+		'default'           => '気になる子がいましたら、お気軽にご連絡ください。',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'catelabo_cta_section_text', array(
+		'label'   => 'CTA帯の本文',
+		'section' => 'catelabo_settings',
+		'type'    => 'text',
 	) );
 
 	// 動物取扱業 登録番号（フッター常時表示）
