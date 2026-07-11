@@ -135,3 +135,12 @@
 .motion-rich .p-kitten-card:hover {
 	transform: translateY(rem(-8));
 }
+
+/* ── 長文対策：rowsバリアント等でのカラムブローアウト防止 ── */
+.p-kitten-card {
+	min-width: 0;
+}
+
+.p-kitten-card__body {
+	min-width: 0;
+}
