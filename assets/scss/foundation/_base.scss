@@ -24,6 +24,23 @@ h4 {
 	letter-spacing: 0.04em;
 }
 
+/* ── 長文の折り返し保険 ──
+ * 日本語はどこでも折り返せるが、長い英字（血統名・キャッテリー名）や
+ * URL・メールアドレスは折り返せない1語として扱われ、カードやグリッドを
+ * 突き破る。要素レベルで保険をかけておく（レイアウトへの副作用なし）。 */
+h1,
+h2,
+h3,
+h4,
+p,
+dt,
+dd,
+li,
+a,
+figcaption {
+	overflow-wrap: break-word;
+}
+
 a {
 	text-decoration: none;
 	transition: opacity 0.2s ease;
