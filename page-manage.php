@@ -114,8 +114,8 @@ get_header();
 					<div class="p-manage__photo p-manage__photo--main js-photo<?php echo $thumb_id ? ' has-photo' : ''; ?>">
 						<input type="hidden" name="thumb_id" value="<?php echo esc_attr( $thumb_id ); ?>" class="js-photo-id">
 						<div class="p-manage__photo-preview js-photo-preview"><?php echo $thumb_id ? wp_get_attachment_image( $thumb_id, 'medium' ) : ''; ?></div>
-						<label class="p-manage__photo-btn">メイン写真を選ぶ<input type="file" name="photo_main" accept="image/*" class="js-photo-input" hidden<?php echo $thumb_id ? '' : ' required'; ?>></label>
-					</div>
+            <label class="p-manage__photo-btn">メイン写真を選ぶ<input type="file" name="photo_main" accept="image/*" class="js-photo-input" hidden></label>
+          </div>
 
 					<div class="p-manage__photo-grid">
 						<?php for ( $i = 1; $i <= 4; $i++ ) : ?>
