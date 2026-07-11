@@ -227,3 +227,15 @@
 		padding-bottom: rem(88);
 	}
 }
+
+
+/* ── 長文対策：グリッド子要素のブローアウト防止 ──
+ * grid/flexの子要素は min-width:auto が既定のため、折り返せない長文が
+ * あるとカラムごと膨張する。0 を明示して親幅の中で折り返させる。 */
+.p-kitten-detail__grid > * {
+	min-width: 0;
+}
+
+.p-kitten-detail__spec dd {
+	min-width: 0;
+}
