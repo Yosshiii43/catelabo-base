@@ -5,15 +5,15 @@
 (function () {
 	'use strict';
 
-	var toggle = document.querySelector('.js-nav-toggle');
-	var nav = document.querySelector('.js-nav');
+	const toggle = document.querySelector('.js-nav-toggle');
+	const nav = document.querySelector('.js-nav');
 
 	if (!toggle || !nav) {
 		return;
 	}
 
 	toggle.addEventListener('click', function () {
-		var isOpen = nav.classList.toggle('is-open');
+		const isOpen = nav.classList.toggle('is-open');
 		toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 	});
 
@@ -37,14 +37,14 @@
 	'use strict';
 
 	document.querySelectorAll('.js-gallery').forEach(function (gallery) {
-		var main = gallery.querySelector('.js-gallery-main');
+		const main = gallery.querySelector('.js-gallery-main');
 		if (!main) {
 			return;
 		}
 
 		gallery.querySelectorAll('.js-gallery-thumb').forEach(function (btn) {
 			btn.addEventListener('click', function () {
-				var src = btn.getAttribute('data-full');
+				const src = btn.getAttribute('data-full');
 				if (!src) {
 					return;
 				}
@@ -69,13 +69,13 @@
 (function () {
 	'use strict';
 
-	var params = new URLSearchParams(window.location.search);
-	var val = params.get('your-kitten');
+	const params = new URLSearchParams(window.location.search);
+	const val = params.get('your-kitten');
 	if (!val) {
 		return;
 	}
 
-	var field = document.querySelector('input[name="your-kitten"]');
+	const field = document.querySelector('input[name="your-kitten"]');
 	if (field && !field.value) {
 		field.value = val;
 	}
@@ -88,14 +88,14 @@
 (function () {
 	'use strict';
 
-	var hero   = document.querySelector('.p-hero--photo');
-	var header = document.querySelector('.p-header');
+	const hero   = document.querySelector('.p-hero--photo');
+	const header = document.querySelector('.p-header');
 	if (!hero || !header) { return; }
 
 	/* 初回ロード時の一瞬を防ぐため先に付与し、IO が訂正する */
 	header.classList.add('is-over-photo');
 
-	var io = new IntersectionObserver(function (entries) {
+	const io = new IntersectionObserver(function (entries) {
 		header.classList.toggle('is-over-photo', entries[0].isIntersecting);
 	}, { threshold: 0 });
 
@@ -112,12 +112,12 @@
 	if (!document.body.classList.contains('js')) {
 		return;
 	}
-	var els = document.querySelectorAll('.c-reveal');
+	const els = document.querySelectorAll('.c-reveal');
 	if (!els.length) {
 		return;
 	}
 
-	var io = new IntersectionObserver(function (entries) {
+	const io = new IntersectionObserver(function (entries) {
 		entries.forEach(function (entry) {
 			if (entry.isIntersecting) {
 				entry.target.classList.add('is-inview');

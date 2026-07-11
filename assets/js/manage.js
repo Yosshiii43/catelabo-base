@@ -9,19 +9,19 @@
 (function () {
 	'use strict';
 
-	var CFG = window.CATELABO_MANAGE || {};
+	const CFG = window.CATELABO_MANAGE || {};
 
 	/* ── 1) 写真の縮小＆プレビュー ── */
 
-	var MAX_EDGE = 1600;
+	const MAX_EDGE = 1600;
 
 	function resizeImage(file) {
 		return createImageBitmap(file).then(function (bmp) {
-			var scale = Math.min(1, MAX_EDGE / Math.max(bmp.width, bmp.height));
+			const scale = Math.min(1, MAX_EDGE / Math.max(bmp.width, bmp.height));
 			if (scale >= 1) {
 				return file; // 十分小さい
 			}
-			var canvas = document.createElement('canvas');
+			const canvas = document.createElement('canvas');
 			canvas.width = Math.round(bmp.width * scale);
 			canvas.height = Math.round(bmp.height * scale);
 			canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
@@ -31,7 +31,7 @@
 						resolve(file);
 						return;
 					}
-					var name = file.name.replace(/\.\w+$/, '') + '.jpg';
+					const name = file.name.replace(/\.\w+$/, '') + '.jpg';
 					resolve(new File([blob], name, { type: 'image/jpeg' }));
 				}, 'image/jpeg', 0.85);
 			});
@@ -41,29 +41,29 @@
 	}
 
 	document.querySelectorAll('.js-photo').forEach(function (slot) {
-		var input = slot.querySelector('.js-photo-input');
-		var preview = slot.querySelector('.js-photo-preview');
-		var hidden = slot.querySelector('.js-photo-id');
-		var removeBtn = slot.querySelector('.js-photo-remove');
+		const input = slot.querySelector('.js-photo-input');
+		const preview = slot.querySelector('.js-photo-preview');
+		const hidden = slot.querySelector('.js-photo-id');
+		const removeBtn = slot.querySelector('.js-photo-remove');
 
 		if (!input || !preview) {
 			return;
 		}
 
 		input.addEventListener('change', function () {
-			var file = input.files[0];
+			const file = input.files[0];
 			if (!file) {
 				return;
 			}
 			resizeImage(file).then(function (resized) {
 				if (resized !== file && window.DataTransfer) {
 					try {
-						var dt = new DataTransfer();
+						const dt = new DataTransfer();
 						dt.items.add(resized);
 						input.files = dt.files;
 					} catch (e) { /* 差し替え不可なら原本のまま送る */ }
 				}
-				var url = URL.createObjectURL(input.files[0]);
+				const url = URL.createObjectURL(input.files[0]);
 				preview.innerHTML = '<img src="' + url + '" alt="">';
 				slot.classList.add('has-photo');
 				if (removeBtn) {
@@ -91,14 +91,14 @@
 		sel.dataset.prev = sel.value;
 
 		sel.addEventListener('change', function () {
-			var label = sel.options[sel.selectedIndex].text;
+			const label = sel.options[sel.selectedIndex].text;
 
 			if (!window.confirm('「' + label + '」に変更しますか？')) {
 				sel.value = sel.dataset.prev;
 				return;
 			}
 
-			var body = new URLSearchParams({
+			const body = new URLSearchParams({
 				action: 'catelabo_kitten_status',
 				nonce: CFG.nonce || '',
 				id: sel.dataset.id,
@@ -112,7 +112,7 @@
 						throw new Error('failed');
 					}
 					sel.dataset.prev = sel.value;
-					var item = sel.closest('.p-manage__item');
+					const item = sel.closest('.p-manage__item');
 					if (item) {
 						item.dataset.status = sel.value;
 					}
@@ -126,12 +126,12 @@
 
 	/* ── 3) LINE配信文コピー ── */
 
-	var copyBtn = document.querySelector('.js-copy-line');
-	var lineText = document.querySelector('.js-line-text');
+	const copyBtn = document.querySelector('.js-copy-line');
+	const lineText = document.querySelector('.js-line-text');
 
 	if (copyBtn && lineText) {
 		copyBtn.addEventListener('click', function () {
-			var done = function () {
+			const done = function () {
 				copyBtn.textContent = 'コピーしました ✓';
 				setTimeout(function () {
 					copyBtn.textContent = '配信文をコピーする';
@@ -155,20 +155,20 @@
    * 写真チェックは submit ではなく click ハンドラの中で先に行い、
    * 不足していればそこで preventDefault してブラウザ標準検証に進ませない。 */
 
-  var form = document.querySelector('.js-manage-form');
+  const form = document.querySelector('.js-manage-form');
   if (form) {
 
     /* 写真エラーのインライン表示。
      * alert() は scrollIntoView(smooth) を中断させ、閉じた後に画面へ痕跡が
      * 残らないため使わない。メッセージ要素（role=alert）を写真枠の直後に
      * 出し、そこへスクロールする。 */
-    var photoSlot = form.querySelector('.p-manage__photo--main');
+    const photoSlot = form.querySelector('.p-manage__photo--main');
 
     function showPhotoError() {
       if (!photoSlot) {
         return;
       }
-      var msg = form.querySelector('.js-photo-error');
+      let msg = form.querySelector('.js-photo-error');
       if (!msg) {
         msg = document.createElement('p');
         msg.className = 'p-manage__field-error js-photo-error';
@@ -181,7 +181,7 @@
     }
 
     function clearPhotoError() {
-      var msg = form.querySelector('.js-photo-error');
+      const msg = form.querySelector('.js-photo-error');
       if (msg) {
         msg.remove();
       }
@@ -191,7 +191,7 @@
     }
 
     if (photoSlot) {
-      var mainInput = photoSlot.querySelector('.js-photo-input');
+      const mainInput = photoSlot.querySelector('.js-photo-input');
       if (mainInput) {
         mainInput.addEventListener('change', clearPhotoError);
       }
@@ -202,9 +202,9 @@
         if (btn.name !== 'publish') {
           return;
         }
-        var thumbInput = form.querySelector('input[name="thumb_id"]');
-        var fileInput  = form.querySelector('input[name="photo_main"]');
-        var hasPhoto   = (thumbInput && thumbInput.value && thumbInput.value !== '0') ||
+        const thumbInput = form.querySelector('input[name="thumb_id"]');
+        const fileInput  = form.querySelector('input[name="photo_main"]');
+        const hasPhoto   = (thumbInput && thumbInput.value && thumbInput.value !== '0') ||
                           (fileInput && fileInput.files && fileInput.files.length > 0);
 
         if (!hasPhoto) {
@@ -233,7 +233,7 @@
     // 無効フィールドが複数あると1つずつ発火して scrollIntoView が競合し
     // 最後（一番下）の欄へ飛んでしまうため、1回の検証につき最初の1つ
     // だけにスクロールする。
-    var invalidScrolled = false;
+    let invalidScrolled = false;
     form.addEventListener('invalid', function (e) {
       if (invalidScrolled) {
         return;
