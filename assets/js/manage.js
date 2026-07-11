@@ -158,6 +158,45 @@
   var form = document.querySelector('.js-manage-form');
   if (form) {
 
+    /* 写真エラーのインライン表示。
+     * alert() は scrollIntoView(smooth) を中断させ、閉じた後に画面へ痕跡が
+     * 残らないため使わない。メッセージ要素（role=alert）を写真枠の直後に
+     * 出し、そこへスクロールする。 */
+    var photoSlot = form.querySelector('.p-manage__photo--main');
+
+    function showPhotoError() {
+      if (!photoSlot) {
+        return;
+      }
+      var msg = form.querySelector('.js-photo-error');
+      if (!msg) {
+        msg = document.createElement('p');
+        msg.className = 'p-manage__field-error js-photo-error';
+        msg.setAttribute('role', 'alert');
+        msg.textContent = 'メイン写真が選ばれていません。「メイン写真を選ぶ」から写真を選んでください。';
+        photoSlot.insertAdjacentElement('afterend', msg);
+      }
+      photoSlot.classList.add('is-error');
+      photoSlot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function clearPhotoError() {
+      var msg = form.querySelector('.js-photo-error');
+      if (msg) {
+        msg.remove();
+      }
+      if (photoSlot) {
+        photoSlot.classList.remove('is-error');
+      }
+    }
+
+    if (photoSlot) {
+      var mainInput = photoSlot.querySelector('.js-photo-input');
+      if (mainInput) {
+        mainInput.addEventListener('change', clearPhotoError);
+      }
+    }
+
     form.querySelectorAll('.js-submit').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         if (btn.name !== 'publish') {
@@ -170,17 +209,7 @@
 
         if (!hasPhoto) {
           e.preventDefault();
-          var photoSlot = document.querySelector('.p-manage__photo--main');
-          if (photoSlot) {
-            photoSlot.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            photoSlot.style.outline = '2px solid #c0392b';
-            photoSlot.style.outlineOffset = '4px';
-            setTimeout(function () {
-              photoSlot.style.outline = '';
-              photoSlot.style.outlineOffset = '';
-            }, 3000);
-          }
-          window.alert('メイン写真が選ばれていません。写真を選んでからもう一度お試しください。');
+          showPhotoError();
         }
       });
     });
@@ -195,7 +224,18 @@
     // ブラウザの標準検証で無効なフィールドにフォーカスが移っても、
     // スクロールが伴わないことがあるため、明示的にスクロールさせる。
     // 'invalid' イベントはバブリングしないため capture(true) で拾う。
+    // 無効フィールドが複数あると1つずつ発火して scrollIntoView が競合し
+    // 最後（一番下）の欄へ飛んでしまうため、1回の検証につき最初の1つ
+    // だけにスクロールする。
+    var invalidScrolled = false;
     form.addEventListener('invalid', function (e) {
+      if (invalidScrolled) {
+        return;
+      }
+      invalidScrolled = true;
+      setTimeout(function () {
+        invalidScrolled = false;
+      }, 0);
       e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, true);
   }

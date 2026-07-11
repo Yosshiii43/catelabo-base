@@ -45,6 +45,18 @@
 		margin-top: rem(8);
 	}
 
+	/* 項目直下に出すインラインエラー（JSが生成。写真必須チェック等） */
+	&__field-error {
+		margin-top: rem(8);
+		font-size: rem(13);
+		font-weight: 700;
+		color: var(--color-status-talk);
+
+		&::before {
+			content: "⚠ ";
+		}
+	}
+
 	&__req {
 		font-size: rem(11);
 		font-weight: 700;
@@ -254,6 +266,11 @@
 
 	&__photo--main .p-manage__photo-preview {
 		max-width: rem(360);
+	}
+
+	/* 必須チェックで弾かれた写真枠（JSが is-error を付与） */
+	&__photo.is-error .p-manage__photo-preview {
+		border: 2px solid var(--color-status-talk);
 	}
 
 	&__photo-btn {

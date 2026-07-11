@@ -59,10 +59,10 @@ get_header();
 
 		<?php // ── 通知 ── ?>
 		<?php if ( isset( $_GET['error'] ) && 'required' === $_GET['error'] ) : ?>
-			<p class="p-manage__notice p-manage__notice--error">必須項目が入力されていませんでした。お手数ですが、もう一度入力してください。</p>
+			<p class="p-manage__notice p-manage__notice--error" role="alert">必須項目が入力されていませんでした。お手数ですが、もう一度入力してください。</p>
 		<?php endif; ?>
 		<?php if ( ! empty( $_GET['saved'] ) ) : ?>
-			<p class="p-manage__notice">保存しました（下書き）。「公開する」を押すまでサイトには表示されません。</p>
+			<p class="p-manage__notice" role="status">保存しました（下書き）。「公開する」を押すまでサイトには表示されません。</p>
 		<?php endif; ?>
 
 		<?php if ( 'done' === $view ) : ?>
