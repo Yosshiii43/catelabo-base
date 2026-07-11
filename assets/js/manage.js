@@ -215,10 +215,16 @@
     });
 
     // 二重送信防止（ここに到達＝写真チェック通過後、ブラウザ標準検証も通過した本当のsubmit）
+    // 注意: submitハンドラ内で同期的に disabled にすると、送信データの
+    // 構築（イベント処理の後に行われる）から押されたボタンの name=value
+    // （publish=1 / save_draft=1）が除外され、公開が下書きになる。
+    // setTimeout(0) で送信データ構築後に無効化する。
     form.addEventListener('submit', function () {
-      form.querySelectorAll('.js-submit').forEach(function (btn) {
-        btn.disabled = true;
-      });
+      setTimeout(function () {
+        form.querySelectorAll('.js-submit').forEach(function (btn) {
+          btn.disabled = true;
+        });
+      }, 0);
     });
 
     // ブラウザの標準検証で無効なフィールドにフォーカスが移っても、
