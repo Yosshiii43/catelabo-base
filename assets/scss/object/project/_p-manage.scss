@@ -175,6 +175,7 @@
 		max-width: rem(640);
 		display: grid;
 		gap: rem(26);
+		min-width: 0;
 	}
 
 	&__label {
@@ -185,7 +186,7 @@
 	}
 
 	&__field {
-
+    
 		input[type="text"],
 		input[type="date"],
 		input[type="url"],
@@ -207,6 +208,7 @@
 
 	&__radios {
 		display: flex;
+		flex-wrap: wrap;
 		gap: rem(20);
 	}
 
