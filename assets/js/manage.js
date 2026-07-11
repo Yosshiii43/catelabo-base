@@ -147,18 +147,56 @@
 		});
 	}
 
-	/* ── 4) 二重送信防止 ── */
+  /* ── 4) 二重送信防止 ＋ メイン写真の必須チェック
+   * メイン写真の <input type="file"> は hidden のためnative required検証に
+   * 使えない（focusできずエラーで検証全体が沈黙する）ので自前チェックする。
+   * ブラウザ標準の検証（誕生日・性別など）は submit イベントより前、
+   * publishボタンのクリック直後（デフォルト動作の一部）に走るため、
+   * 写真チェックは submit ではなく click ハンドラの中で先に行い、
+   * 不足していればそこで preventDefault してブラウザ標準検証に進ませない。 */
 
-	var form = document.querySelector('.js-manage-form');
-	if (form) {
-		form.addEventListener('submit', function () {
-			// 押されたボタンのname/valueが送信に含まれるよう、無効化は次のティックで行う
-			setTimeout(function () {
-				form.querySelectorAll('.js-submit').forEach(function (btn) {
-					btn.disabled = true;
-					btn.textContent = '送信中…';
-				});
-			}, 0);
-		});
-	}
+  var form = document.querySelector('.js-manage-form');
+  if (form) {
+
+    form.querySelectorAll('.js-submit').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        if (btn.name !== 'publish') {
+          return;
+        }
+        var thumbInput = form.querySelector('input[name="thumb_id"]');
+        var fileInput  = form.querySelector('input[name="photo_main"]');
+        var hasPhoto   = (thumbInput && thumbInput.value && thumbInput.value !== '0') ||
+                          (fileInput && fileInput.files && fileInput.files.length > 0);
+
+        if (!hasPhoto) {
+          e.preventDefault();
+          var photoSlot = document.querySelector('.p-manage__photo--main');
+          if (photoSlot) {
+            photoSlot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            photoSlot.style.outline = '2px solid #c0392b';
+            photoSlot.style.outlineOffset = '4px';
+            setTimeout(function () {
+              photoSlot.style.outline = '';
+              photoSlot.style.outlineOffset = '';
+            }, 3000);
+          }
+          window.alert('メイン写真が選ばれていません。写真を選んでからもう一度お試しください。');
+        }
+      });
+    });
+
+    // 二重送信防止（ここに到達＝写真チェック通過後、ブラウザ標準検証も通過した本当のsubmit）
+    form.addEventListener('submit', function () {
+      form.querySelectorAll('.js-submit').forEach(function (btn) {
+        btn.disabled = true;
+      });
+    });
+
+    // ブラウザの標準検証で無効なフィールドにフォーカスが移っても、
+    // スクロールが伴わないことがあるため、明示的にスクロールさせる。
+    // 'invalid' イベントはバブリングしないため capture(true) で拾う。
+    form.addEventListener('invalid', function (e) {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, true);
+  }
 })();
