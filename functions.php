@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATELABO_BASE_VER', '0.5.0' );
+define( 'CATELABO_BASE_VER', '0.5.1' );
 
 /* ─────────────────────────────
  * スキン定義
@@ -43,6 +43,18 @@ function catelabo_base_current_skin() {
 	$skins = catelabo_base_skins();
 	return isset( $skins[ $skin ] ) ? $skin : 'default';
 }
+
+/* ─────────────────────────────
+ * 管理バー：管理者以外にはフロント側で表示しない
+ * 理由①: 顧客（編集者権限）の画面を「かんたん更新」だけの簡素な体験に保つ
+ * 理由②: 管理バーはモバイル幅でビューポートより横に長くなることがあり、
+ *         固定配置のため html { overflow-x: clip } の外側で iOS の
+ *         横パン（画面の横揺れ）を誘発する（2026-07 実機で確認）。
+ * ※ wp-admin 内の管理バーには影響しない（親猫編集からの戻り導線は生きる）
+ * ──────────────────────────── */
+add_filter( 'show_admin_bar', function ( $show ) {
+	return current_user_can( 'manage_options' ) ? $show : false;
+} );
 
 /* ─────────────────────────────
  * テーマサポート
