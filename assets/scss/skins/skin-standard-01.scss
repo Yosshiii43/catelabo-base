@@ -167,7 +167,7 @@ body.pair-soft {
 	/* 余白のグルーピング：eyebrow〜罫を一塊に締め、本文との間に呼吸を置く
 	 * （eyebrow下24→16 / 罫の上下を対称20-30→非対称 上14-18・下32-44） */
 	&__eyebrow {
-		margin-bottom: rem(16);
+		margin-bottom: rem(12); /* 大きなキャッチとの視覚距離を締める（16→12） */
 	}
 
 	/* 箔押しの罫：インクの灰線 → 差し色の1pxヘアライン（アクセントの居場所①） */
@@ -184,14 +184,18 @@ body.pair-soft {
 }
 
 /* 金の罫をセクション見出し・下層h1へ展開（page.php h1も同じc-heading構造＝一括で効く）
- * クラスタの原則はここでも同じ：label＋title＋罫が一塊、その下に大きな呼吸（既存mb 32-56） */
+ * クラスタの原則はここでも同じ：label＋title＋罫を密に固め、既存の下余白(32-56)を呼吸にする */
+.c-heading__label {
+	margin-bottom: rem(4); /* 8→4：クラスタ内を密に */
+}
+
 .c-heading::after {
 	content: "";
 	display: block;
 	width: rem(44);
 	height: 1px;
 	background: var(--std-accent-deco);
-	margin-top: rclamp(14, 18, 375, 1440);
+	margin-top: rclamp(10, 14, 375, 1440); /* 14-18→10-14：クラスタ内を密に */
 	margin-inline: auto;
 }
 
