@@ -11,56 +11,51 @@
  *  2. カスタマイザー「フォントペア」で classic / modern / soft を選ぶ
  *  3. ビルド → コントラスト比の確認（§監査）
  *  派生色はすべて color-mix / oklch で自動生成される。
- *  個別案件で派生結果が合わない場合のみ、派生ブロックの該当行を直接上書きする。
+ *
+ * ── スコープ設計 ────────────────────────────────────
+ *  変数・セレクタともに body.skin-standard-01 の中に収める。
+ *  :root ではなく body スコープでも CSS カスタムプロパティは子孫に継承される。
+ *  これにより他スキン（yuki等）の変数を上書きしない。
  *
  * ── 監査グリッド ────────────────────────────────────
  *  3ペア × 色2系統（暗色main／明色main）＝6パターンで崩れないこと。
  *  監査の問い：「¥165,000の仕事に見えるか。安いテンプレに見える瞬間が1箇所でもないか」
  * ──────────────────────────────────────────────── */
 
-:root {
+body.skin-standard-01 {
 
 	/* ═══════════ 設定ブロック（納品時に触るのはこの3行だけ） ═══════════ */
 
-	--skin-base:   #F6F4EF; /* 紙色（ページ背景。明るい色を想定） */
-	--skin-main:   #46586A; /* 主役色（ボタン・見出しラベル・募集中バッジ） */
-	--skin-accent: #937218; /* 差し色（控えめに使用。既定＝黄金。罫と商談中バッジに派生） */
+	--skin-base:   #F6F4EF;
+	--skin-main:   #46586A;
+	--skin-accent: #937218;
 
-	/* ═══════════ ここから下は自動派生（案件個別の補正時のみ触る） ═══════════ */
+	/* ═══════════ 自動派生 ═══════════ */
 
-	/* 本文色は可読性保証のため固定（40〜60代読者・仕様書§1） */
 	--std-ink: #333333;
 
-	/* ── 面の階調：紙の上の紙 ── */
 	--color-bg:        var(--skin-base);
-	--color-surface:   color-mix(in oklch, var(--skin-base), #FFFFFF 60%); /* カード＝一段明るい紙 */
-	--color-surface-2: color-mix(in oklch, var(--skin-base), var(--skin-main) 7%); /* 表ヘッダー等 */
-	--std-wall:        color-mix(in oklch, var(--skin-base), var(--skin-main) 4%); /* セクションの沈み（§4配色の沈み。Phase Bで適用） */
+	--color-surface:   color-mix(in oklch, var(--skin-base), #FFFFFF 60%);
+	--color-surface-2: color-mix(in oklch, var(--skin-base), var(--skin-main) 7%);
+	--std-wall:        color-mix(in oklch, var(--skin-base), var(--skin-main) 4%);
 
-	/* ── 文字 ── */
 	--color-ink:     var(--std-ink);
 	--color-ink-sub: color-mix(in oklch, var(--std-ink), var(--skin-base) 34%);
 
-	/* ── アクセント ── */
 	--color-primary:     var(--skin-main);
-	--color-primary-ink: #FFFFFF; /* フォールバック。@supports側で明暗自動判定に置換 */
+	--color-primary-ink: #FFFFFF;
 	--color-accent:      var(--skin-accent);
 
-	/* ── 罫線：インクの薄まり ── */
 	--color-line: color-mix(in srgb, var(--std-ink) 15%, transparent);
 
-	/* ── ステータス（バッジは白文字前提。openはprimary連動＝明度上限を継承） ── */
 	--color-status-open: var(--color-primary);
 	--color-status-talk: color-mix(in oklch, var(--skin-accent), var(--std-ink) 25%);
 	--color-status-done: color-mix(in oklch, var(--std-ink), var(--skin-base) 30%);
 	--color-status-ink:  #FFFFFF;
 	--color-on-photo:    #FFFFFF;
 
-	/* ── 装飾用アクセント（罫線・箔押し的ディテール専用。文字には使わない） ── */
 	--std-accent-deco: var(--skin-accent);
 
-	/* ── 形・質感の既定はペアが持つ（下のpair-*ブロック）。
-	      ここではペアクラス未付与時の保険として classic 相当を敷く ── */
 	--font-heading: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
 	--font-body:    "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
 	--font-note:    "Noto Sans JP", sans-serif;
@@ -73,161 +68,155 @@
 	--radius-btn: var(--radius-xs);
 	--border-card: 1px solid var(--color-line);
 	--shadow-card: none;
-}
 
-/* 可読性の自動保証（relative color syntax 対応ブラウザ＝2024年以降の全常用ブラウザ）
- * primaryはボタン背景と文字色を兼ねるため、明度上限(oklch L 0.52)を掛ける。
- * 薄い色を渡されても色相を保ったまま「読める深さ」に沈む。ボタン白文字も同時に安定。
- * 生の --skin-main は surface-2 / wall の色味として生き続ける。
- * status-talk も同じ理由で明度上限。非対応ブラウザは上のフォールバック
- * （raw main＋白文字）で動作。明色main案件で旧ブラウザ配慮が要る場合のみ
- * 設定ブロック直下で --color-primary を手動指定する。 */
-@supports (color: oklch(from red calc(l) c h)) {
-	:root {
+	/* 可読性の自動保証 */
+	@supports (color: oklch(from red calc(l) c h)) {
 		--color-primary:     oklch(from var(--skin-main) min(l, 0.52) c h);
 		--color-status-talk: oklch(from var(--skin-accent) min(l, 0.55) c h);
-		--std-accent-deco:   oklch(from var(--skin-accent) min(l, 0.72) c h); /* 淡色でも罫が消えない */
-	}
-}
-
-/* ═══════════ フォントペア（カスタマイザー「フォントペア」で切替） ═══════════
- * 書体だけでなく、字間・ウェイト・角丸・線/影の世界観まで1セットの「ムード」。
- * Google Fonts の読込は functions.php の pair_fonts でペア連動する。 */
-
-/* ── classic：明朝の正統。線の世界・かっちりした角 ── */
-body.pair-classic {
-	--font-heading: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
-	--std-h-weight:   600;
-	--std-h-tracking: 0.06em;
-	--radius-xs: 2px;
-	--radius-s:  3px;
-	--radius-m:  6px;
-	--radius-l:  10px;
-	--radius-btn: var(--radius-xs);
-	--border-card: 1px solid var(--color-line);
-	--shadow-card: none;
-}
-
-/* ── modern：直線の精度。影の世界・完全なスクエア ──
- * 見出しは M PLUS 1p 500（比較シートで確定 2026-07-12。太いウェイトは
- * 「上質な便箋」から離れるため、精度は直角と字間で出す） */
-body.pair-modern {
-	--font-heading: "M PLUS 1p", "Hiragino Kaku Gothic ProN", sans-serif;
-	--std-h-weight:   500;
-	--std-h-tracking: 0.02em;
-	--radius-xs: 0px;
-	--radius-s:  0px;
-	--radius-m:  2px;
-	--radius-l:  4px;
-	--radius-btn: 0px;
-	--border-card: none;
-	--shadow-card: 0 10px 30px -20px color-mix(in srgb, var(--std-ink) 45%, transparent);
-}
-
-/* ── soft：丸ゴの柔らかさ。影の世界・大きな角丸・ピル型ボタン ── */
-body.pair-soft {
-	--font-heading: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
-	--std-h-weight:   500;
-	--std-h-tracking: 0.05em;
-	--radius-xs: 6px;
-	--radius-s:  8px;
-	--radius-m:  14px;
-	--radius-l:  22px;
-	--radius-btn: 999px;
-	--border-card: none;
-	--shadow-card: 0 14px 36px -22px color-mix(in srgb, var(--std-ink) 38%, transparent);
-}
-
-/* ═══════════ ペアの調律を見出しへ適用 ═══════════
- * ベース側は字間・ウェイトを直値で持つため（例: p-hero__title は 600 / 0.05em）、
- * ペアで宣言した変数をここで契約クラスに配線する。対象は見出し系のみ（本文は触らない）。 */
-.c-heading__title,
-.p-hero__title,
-.p-kitten-detail__section-title,
-.p-page__legal-title,
-.p-page__content h2 {
-	font-weight: var(--std-h-weight);
-	letter-spacing: var(--std-h-tracking);
-	font-feature-settings: "palt" 1; /* 詰め組み。「組んである」見出しの土台 */
-}
-
-/* ═══════════ Phase B-1：ヒーローの磨き ═══════════
- * 骨格（グリッド・バリアント構成）はdefaultのまま。§4の磨き所のみ。
- * §9-1確認済み：上書きは background/opacity（divider）・border-width（ghost）のみで
- * ベースの寸法・配置プロパティには触れていない。 */
-
-.p-hero {
-
-	/* タイポの調律：改行バランス＋最大値を3remに抑制（52pxは便箋には大声すぎる） */
-	&__title {
-		text-wrap: balance;
-		font-size: rclamp(30, 48, 375, 1440);
+		--std-accent-deco:   oklch(from var(--skin-accent) min(l, 0.72) c h);
 	}
 
-	/* 余白のグルーピング：eyebrow〜罫を一塊に締め、本文との間に呼吸を置く
-	 * （eyebrow下24→16 / 罫の上下を対称20-30→非対称 上14-18・下32-44） */
-	&__eyebrow {
-		margin-bottom: rem(12); /* 大きなキャッチとの視覚距離を締める（16→12） */
+	/* ═══════════ フォントペア ═══════════ */
+
+	&.pair-classic {
+		--font-heading: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
+		--std-h-weight:   600;
+		--std-h-tracking: 0.06em;
+		--radius-xs: 2px;
+		--radius-s:  3px;
+		--radius-m:  6px;
+		--radius-l:  10px;
+		--radius-btn: var(--radius-xs);
+		--border-card: 1px solid var(--color-line);
+		--shadow-card: none;
 	}
 
-	/* 箔押しの罫：インクの灰線 → 差し色の1pxヘアライン（アクセントの居場所①） */
-	&__divider {
+	&.pair-modern {
+		--font-heading: "M PLUS 1p", "Hiragino Kaku Gothic ProN", sans-serif;
+		--std-h-weight:   500;
+		--std-h-tracking: 0.02em;
+		--radius-xs: 0px;
+		--radius-s:  0px;
+		--radius-m:  2px;
+		--radius-l:  4px;
+		--radius-btn: 0px;
+		--border-card: none;
+		--shadow-card: 0 10px 30px -20px color-mix(in srgb, var(--std-ink) 45%, transparent);
+	}
+
+	&.pair-soft {
+		--font-heading: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+		--std-h-weight:   500;
+		--std-h-tracking: 0.05em;
+		--radius-xs: 6px;
+		--radius-s:  8px;
+		--radius-m:  14px;
+		--radius-l:  22px;
+		--radius-btn: 999px;
+		--border-card: none;
+		--shadow-card: 0 14px 36px -22px color-mix(in srgb, var(--std-ink) 38%, transparent);
+	}
+
+	/* ═══════════ ペアの調律を見出しへ配線 ═══════════ */
+
+	.c-heading__title,
+	.p-hero__title,
+	.p-kitten-detail__section-title,
+	.p-page__legal-title,
+	.p-page__content h2 {
+		font-weight: var(--std-h-weight);
+		letter-spacing: var(--std-h-tracking);
+		font-feature-settings: "palt" 1;
+	}
+
+	/* ═══════════ Phase B-1：ヒーローの磨き ═══════════ */
+
+	.p-hero {
+		&__title {
+			text-wrap: balance;
+			font-size: rclamp(30, 48, 375, 1440);
+		}
+
+		&__eyebrow {
+			margin-bottom: rem(12);
+		}
+
+		&__divider {
+			background: var(--std-accent-deco);
+			opacity: 1;
+			margin-block: rclamp(14, 18, 375, 1440) rclamp(32, 44, 375, 1440);
+		}
+
+		&__text {
+			letter-spacing: 0.01em;
+		}
+	}
+
+	/* ═══════════ セクション見出しの金の罫 ═══════════ */
+
+	.c-heading__label {
+		margin-bottom: rem(4);
+	}
+
+	.c-heading::after {
+		content: "";
+		display: block;
+		width: rem(44);
+		height: 1px;
 		background: var(--std-accent-deco);
-		opacity: 1;
-		margin-block: rclamp(14, 18, 375, 1440) rclamp(32, 44, 375, 1440);
+		margin-top: rclamp(10, 14, 375, 1440);
+		margin-inline: auto;
 	}
 
-	/* 本文の呼吸 */
-	&__text {
-		letter-spacing: 0.01em;
+	.c-heading--left::after {
+		margin-inline: 0;
 	}
-}
 
-/* 金の罫をセクション見出し・下層h1へ展開（page.php h1も同じc-heading構造＝一括で効く）
- * クラスタの原則はここでも同じ：label＋title＋罫を密に固め、既存の下余白(32-56)を呼吸にする */
-.c-heading__label {
-	margin-bottom: rem(4); /* 8→4：クラスタ内を密に */
-}
+	/* ═══════════ ナビをfont-headingと統一 ═══════════ */
 
-.c-heading::after {
-	content: "";
-	display: block;
-	width: rem(44);
-	height: 1px;
-	background: var(--std-accent-deco);
-	margin-top: rclamp(10, 14, 375, 1440); /* 14-18→10-14：クラスタ内を密に */
-	margin-inline: auto;
-}
+	.p-header__menu a {
+		font-family: var(--font-heading);
+	}
 
-.c-heading--left::after {
-	margin-inline: 0;
-}
+	/* ═══════════ ボタンの触感 ═══════════ */
 
-/* ナビをボタン（font-heading）と統一。ペア切替でナビの書体も連動する */
-.p-header__menu a {
-	font-family: var(--font-heading);
-}
+	.c-btn--ghost {
+		border-width: 1px;
+	}
 
-/* ═══════════ 触感：ボタンの精度（サイト全域） ═══════════ */
+	.c-btn:hover {
+		transform: none;
+	}
 
-/* 細い枠ほど上質に読める。1.5px → 1px */
-.c-btn--ghost {
-	border-width: 1px;
-}
+	.c-btn--primary:hover {
+		background: color-mix(in oklch, var(--color-primary), var(--std-ink) 12%);
+	}
 
-/* 浮き上がり(-2px)は可愛らしさに振れるため廃止。応答は色だけで返す */
-.c-btn:hover {
-	transform: none;
-}
+	.c-btn--ghost:hover {
+		background: color-mix(in srgb, var(--std-ink) 6%, transparent);
+	}
 
-.c-btn--primary:hover {
-	background: color-mix(in oklch, var(--color-primary), var(--std-ink) 12%);
-}
+	.c-btn--primary:active {
+		background: color-mix(in oklch, var(--color-primary), var(--std-ink) 20%);
+	}
 
-.c-btn--ghost:hover {
-	background: color-mix(in srgb, var(--std-ink) 6%, transparent);
-}
+	/* ═══════════ Phase B-2：子猫一覧 ═══════════ */
 
-.c-btn--primary:active {
-	background: color-mix(in oklch, var(--color-primary), var(--std-ink) 20%);
+	.p-more .c-btn {
+		font-size: 13px;
+		padding: calc(var(--space) * 1.25) calc(var(--space) * 2.5);
+		letter-spacing: 0.08em;
+	}
+
+	/* カードhover：0.2s / -4px
+	 * ベース側 transition が transform 単体のため !important で上書き */
+	.p-kitten-card {
+		transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+		            box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+	}
+
+	.p-kitten-card:hover {
+		transform: translateY(-4px) !important;
+		box-shadow: 0 16px 40px -16px color-mix(in srgb, var(--std-ink) 22%, transparent);
+	}
 }
