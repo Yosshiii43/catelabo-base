@@ -105,11 +105,11 @@ body.pair-classic {
 }
 
 /* ── modern：直線の精度。影の世界・完全なスクエア ──
- * 見出しは IBM Plex Sans JP（本文Notoと骨格の違う技術的な角ゴ）。
- * 書体対比を持たない代わりに、ウェイト差(600)と直角が「精度」の署名になる */
+ * 見出しは M PLUS 1p 500（比較シートで確定 2026-07-12。太いウェイトは
+ * 「上質な便箋」から離れるため、精度は直角と字間で出す） */
 body.pair-modern {
-	--font-heading: "IBM Plex Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
-	--std-h-weight:   600;
+	--font-heading: "M PLUS 1p", "Hiragino Kaku Gothic ProN", sans-serif;
+	--std-h-weight:   500;
 	--std-h-tracking: 0.02em;
 	--radius-xs: 0px;
 	--radius-s:  0px;

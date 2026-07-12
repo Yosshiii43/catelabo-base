@@ -40,7 +40,7 @@ function catelabo_base_skins() {
       // フォントペア連動（カスタマイザー「フォントペア」で切替。読み込むのは選択中の1ペア分のみ）
       'pair_fonts'   => array(
         'classic' => 'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
-        'modern'  => 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+        'modern'  => 'https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
         'soft'    => 'https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
       ),
     ),
