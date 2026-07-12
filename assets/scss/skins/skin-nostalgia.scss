@@ -361,7 +361,7 @@
 }
 
 .p-kitten-card__photo {
-	border-radius: var(--radius-m);
+	border-radius: var(--radius-m) var(--radius-m) 0 0; /* カードの角丸に追従：上のみ丸・下は直角 */
 	overflow: hidden;
 }
 
