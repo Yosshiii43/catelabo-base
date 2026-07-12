@@ -121,6 +121,7 @@ body.skin-standard-01 {
 
 	.c-heading__title,
 	.p-hero__title,
+	.p-cta__title,
 	.p-kitten-detail__section-title,
 	.p-page__legal-title,
 	.p-page__content h2 {
@@ -178,26 +179,43 @@ body.skin-standard-01 {
 		font-family: var(--font-heading);
 	}
 
-	/* ═══════════ ボタンの触感 ═══════════ */
+	/* ═══════════ ボタンの触感：動かず、色で応える ═══════════
+	 * 浮き上がりを廃した分、色の応答を一段強くする。
+	 * ベースの transition に background-color が無く色が瞬間切替になるため、ここで足す */
 
-	.c-btn--ghost {
-		border-width: 1px;
+	.c-btn {
+		transition: background-color 0.25s ease, transform 0.2s ease,
+		            box-shadow 0.2s ease, opacity 0.2s ease;
 	}
 
 	.c-btn:hover {
 		transform: none;
 	}
 
-	.c-btn--primary:hover {
-		background: color-mix(in oklch, var(--color-primary), var(--std-ink) 12%);
+	.c-btn--ghost {
+		border-width: 1px;
 	}
 
 	.c-btn--ghost:hover {
 		background: color-mix(in srgb, var(--std-ink) 6%, transparent);
 	}
 
+	/* ネイビー実ボタン：沈み12%→18%（暗色面での知覚差を確保） */
+	.c-btn--primary:hover {
+		background: color-mix(in oklch, var(--color-primary), var(--std-ink) 18%);
+	}
+
 	.c-btn--primary:active {
-		background: color-mix(in oklch, var(--color-primary), var(--std-ink) 20%);
+		background: color-mix(in oklch, var(--color-primary), var(--std-ink) 26%);
+	}
+
+	/* CTAの白ボタン（inverse）：白→紙色に主役色を一滴。濃色面の上で確実に見える変化 */
+	.c-btn--inverse:hover {
+		background: color-mix(in oklch, var(--color-primary-ink), var(--skin-main) 12%);
+	}
+
+	.c-btn--inverse:active {
+		background: color-mix(in oklch, var(--color-primary-ink), var(--skin-main) 20%);
 	}
 
 	/* ═══════════ Phase B-2：子猫一覧 ═══════════ */
@@ -219,4 +237,7 @@ body.skin-standard-01 {
 		transform: translateY(-4px) !important;
 		box-shadow: 0 16px 40px -16px color-mix(in srgb, var(--std-ink) 22%, transparent);
 	}
+
+	/* CTA帯の折返し制御（balance / pretty / auto-phrase）は
+	 * 全スキン普遍の品質として _p-cta.scss へ昇格済み（2026-07-13） */
 }
