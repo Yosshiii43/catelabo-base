@@ -24,7 +24,18 @@
 
 body.skin-standard-01 {
 
-	/* ═══════════ 設定ブロック（納品時に触るのはこの3行だけ） ═══════════ */
+	/* ═══════════ 設定ブロック（納品時に触るのはこの3行だけ） ═══════════
+	 *
+	 * mainの思想（クライアント説明用）：
+	 * 「お選びの色は、お問い合わせの帯（CTA）にそのまま生きます。
+	 *   暗い色ならボタンや見出しのインクにも無変換で使われ、
+	 *   明るい色の場合、ボタン等はその色を深めたインクになります。
+	 *   セクションの境界にはお選びの色の細い罫が引かれます」
+	 * ・CTA帯＝生のmain（文字は明暗自動判定：暗→白／明→濃色）
+	 * ・インク役（ボタン・ラベル・バッジ）＝min(l,0.52)の下限ガード。暗色は無変換
+	 * ・境界罫＝min(l,0.82)の視認ガード。暗色は無変換
+	 * ・面（セクション背景）は染めない＝便箋の人格。全面で色を立てたい要望は
+	 *   別スキンの領域とし、ヒアリング時に期待値を合わせること */
 
 	--skin-base:   #F6F4EF;
 	--skin-main:   #46586A;
@@ -37,7 +48,8 @@ body.skin-standard-01 {
 	--color-bg:        var(--skin-base);
 	--color-surface:   color-mix(in oklch, var(--skin-base), #FFFFFF 60%);
 	--color-surface-2: color-mix(in oklch, var(--skin-base), var(--skin-main) 7%);
-	--std-wall:        color-mix(in oklch, var(--skin-base), var(--skin-main) 4%);
+	--std-main-line: var(--skin-main); /* 境界の罫。@supports側で淡色時のみ深める */
+	--std-cta-ink:   #FFFFFF;          /* CTA帯の文字。@supports側で明暗自動判定に置換 */
 
 	--color-ink:     var(--std-ink);
 	--color-ink-sub: color-mix(in oklch, var(--std-ink), var(--skin-base) 34%);
@@ -61,6 +73,7 @@ body.skin-standard-01 {
 	--font-note:    "Noto Sans JP", sans-serif;
 	--std-h-weight:   600;
 	--std-h-tracking: 0.06em;
+	--std-btn-weight: 600; /* 明朝500はボタンサイズでは細い（ペアで切替） */
 	--radius-xs: 2px;
 	--radius-s:  3px;
 	--radius-m:  6px;
@@ -69,11 +82,16 @@ body.skin-standard-01 {
 	--border-card: 1px solid var(--color-line);
 	--shadow-card: none;
 
-	/* 可読性の自動保証 */
-	@supports (color: oklch(from red calc(l) c h)) {
-		--color-primary:     oklch(from var(--skin-main) min(l, 0.52) c h);
-		--color-status-talk: oklch(from var(--skin-accent) min(l, 0.55) c h);
-		--std-accent-deco:   oklch(from var(--skin-accent) min(l, 0.72) c h);
+	/* 可読性の自動保証（relative color syntax 対応ブラウザ）
+	 * 注：Sassはバージョンによって calc()/min() 内のチャンネル名(l)を
+	 * SassScriptとして解析しようとしてビルドエラーになるため、
+	 * 文字列補間 #{'...'} で素通しする（出力されるCSSは同一） */
+	@supports #{'(color: oklch(from red l c h))'} {
+		--color-primary:     #{'oklch(from var(--skin-main) min(l, 0.52) c h)'};
+		--color-status-talk: #{'oklch(from var(--skin-accent) min(l, 0.55) c h)'};
+		--std-accent-deco:   #{'oklch(from var(--skin-accent) min(l, 0.72) c h)'};
+		--std-main-line:     #{'oklch(from var(--skin-main) min(l, 0.82) c h)'}; /* 淡色でも罫が消えない一方通行ガード */
+		--std-cta-ink:       #{'oklch(from var(--skin-main) clamp(0.25, (0.68 - l) * infinity, 0.985) 0 h)'}; /* mainが暗→白 / 明→濃色 */
 	}
 
 	/* ═══════════ フォントペア ═══════════ */
@@ -82,6 +100,7 @@ body.skin-standard-01 {
 		--font-heading: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
 		--std-h-weight:   600;
 		--std-h-tracking: 0.06em;
+		--std-btn-weight: 600;
 		--radius-xs: 2px;
 		--radius-s:  3px;
 		--radius-m:  6px;
@@ -95,6 +114,7 @@ body.skin-standard-01 {
 		--font-heading: "M PLUS 1p", "Hiragino Kaku Gothic ProN", sans-serif;
 		--std-h-weight:   500;
 		--std-h-tracking: 0.02em;
+		--std-btn-weight: 500;
 		--radius-xs: 0px;
 		--radius-s:  0px;
 		--radius-m:  2px;
@@ -108,6 +128,7 @@ body.skin-standard-01 {
 		--font-heading: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
 		--std-h-weight:   500;
 		--std-h-tracking: 0.05em;
+		--std-btn-weight: 500;
 		--radius-xs: 6px;
 		--radius-s:  8px;
 		--radius-m:  14px;
@@ -153,6 +174,12 @@ body.skin-standard-01 {
 		}
 	}
 
+	/* photoバリアントでは罫は白（スコープ化で金の詳細度が勝ってしまった退行の修正） */
+	.p-hero--photo .p-hero__divider {
+		background: var(--color-on-photo);
+		opacity: 0.6;
+	}
+
 	/* ═══════════ セクション見出しの金の罫 ═══════════ */
 
 	.c-heading__label {
@@ -184,6 +211,7 @@ body.skin-standard-01 {
 	 * ベースの transition に background-color が無く色が瞬間切替になるため、ここで足す */
 
 	.c-btn {
+		font-weight: var(--std-btn-weight);
 		transition: background-color 0.25s ease, transform 0.2s ease,
 		            box-shadow 0.2s ease, opacity 0.2s ease;
 	}
@@ -228,16 +256,64 @@ body.skin-standard-01 {
 
 	/* カードhover：0.2s / -4px
 	 * ベース側 transition が transform 単体のため !important で上書き */
-	.p-kitten-card {
+	.p-kitten-card,
+	a.p-parent-card {
 		transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
 		            box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 	}
 
-	.p-kitten-card:hover {
+	.p-kitten-card:hover,
+	a.p-parent-card:hover {
 		transform: translateY(-4px) !important;
-		box-shadow: 0 16px 40px -16px color-mix(in srgb, var(--std-ink) 22%, transparent);
+		box-shadow: 0 12px 32px -14px color-mix(in srgb, var(--std-ink) 14%, transparent); /* 22%→14%：持ち上げた紙の影は淡く */
 	}
 
 	/* CTA帯の折返し制御（balance / pretty / auto-phrase）は
 	 * 全スキン普遍の品質として _p-cta.scss へ昇格済み（2026-07-13） */
+
+	/* ═══════════ Phase B-4：配色の沈み（§4・改） ═══════════
+	 * 面は染めない（便箋の人格）。原色の生きる場所は2つ：
+	 *  1) セクション境界の1px罫（淡色時のみ視認ガードで深まる）
+	 *  2) CTA帯＝ページで唯一の色面を生のmainに（文字は明暗自動判定）
+	 * :has 非対応の旧ブラウザでは罫なしに自然劣化 */
+
+	/* 境界罫は画面端まで伸ばさない（便箋の罫は紙の中に引く）。
+	 * borderではなく背景グラデーションで「コンテナ幅・中央寄せ・上端」に描画。
+	 * 高精細ディスプレイでは0.5pxのヘアラインに（DPR1環境は1pxが最良） */
+	.l-section:has(.p-kitten-list),
+	.l-section:has(.p-parent-list) {
+		background-image: linear-gradient(var(--std-main-line), var(--std-main-line));
+		background-repeat: no-repeat;
+		background-position: top center;
+		background-size: min(100% - calc(var(--space) * 5), calc(var(--container) - calc(var(--space) * 5))) 1px;
+
+		@media (min-resolution: 2dppx) {
+			background-size: min(100% - calc(var(--space) * 5), calc(var(--container) - calc(var(--space) * 5))) 0.5px;
+		}
+	}
+
+	.p-cta {
+		background: var(--skin-main);
+		color: var(--std-cta-ink);
+	}
+
+	.p-cta__title,
+	.p-cta__text {
+		color: var(--std-cta-ink);
+	}
+
+	/* ヘッダーのお問い合わせボタンもCTA帯と同じ「生main＋自動インク」に。
+	 * 最初に目に入るボタンで顧客の色がそのまま立つ */
+	.p-header__cta.c-btn--primary {
+		background: var(--skin-main);
+		color: var(--std-cta-ink);
+	}
+
+	.p-header__cta.c-btn--primary:hover {
+		background: color-mix(in oklch, var(--skin-main), var(--std-ink) 12%);
+	}
+
+	.p-header__cta.c-btn--primary:active {
+		background: color-mix(in oklch, var(--skin-main), var(--std-ink) 20%);
+	}
 }

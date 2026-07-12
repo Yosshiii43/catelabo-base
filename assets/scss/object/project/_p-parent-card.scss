@@ -56,7 +56,7 @@ a.p-parent-card {
 
 	&:hover {
 		opacity: 1;
-		transform: translateY(rem(-2));
+		transform: translateY(rem(-4)); /* -2pxは知覚できないため子猫カードと同量に */
 	}
 }
 

@@ -127,14 +127,16 @@ while ( have_posts() ) :
 							<dd><?php echo esc_html( $color ); ?></dd>
 						<?php endif; ?>
 
-						<dt>価格</dt>
-						<dd>
-							<?php if ( $price && $price_show ) : ?>
-								<?php echo esc_html( '¥' . number_format( (int) $price ) . '（税込）' ); ?>
-							<?php else : ?>
-								お問い合わせください
-							<?php endif; ?>
-						</dd>
+						<?php if ( 'kettei' !== $status['slug'] ) : // ご家族決定後は価格を非表示（業界慣行） ?>
+							<dt>価格</dt>
+							<dd>
+								<?php if ( $price && $price_show ) : ?>
+									<?php echo esc_html( '¥' . number_format( (int) $price ) . '（税込）' ); ?>
+								<?php else : ?>
+									お問い合わせください
+								<?php endif; ?>
+							</dd>
+						<?php endif; ?>
 					</dl>
 
 					<?php if ( $vaccine_label || $dna_label || $health ) : ?>
