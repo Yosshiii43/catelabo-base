@@ -88,8 +88,9 @@ add_action( 'after_setup_theme', function () {
 	) );
 	add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'style', 'script', 'navigation-widgets' ) );
 	register_nav_menus( array(
-		'primary' => 'メインメニュー',
-		'footer'  => 'フッターメニュー',
+		'primary'      => 'メインメニュー',
+		'footer'       => 'フッターメニュー',
+		'footer_legal' => 'フッター法的リンク（法定表示・プライバシーポリシー等）',
 	) );
 } );
 

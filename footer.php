@@ -17,6 +17,20 @@
 			?>
 		</nav>
 
+		<?php if ( has_nav_menu( 'footer_legal' ) ) : ?>
+			<nav class="p-footer__legal" aria-label="法的情報">
+				<?php
+				wp_nav_menu( array(
+					'theme_location' => 'footer_legal',
+					'container'      => false,
+					'menu_class'     => 'p-footer__legal-menu',
+					'depth'          => 1,
+					'fallback_cb'    => '__return_empty_string',
+				) );
+				?>
+			</nav>
+		<?php endif; ?>
+
 		<?php $license = get_theme_mod( 'catelabo_license' ); ?>
 		<?php if ( $license ) : ?>
 			<p class="p-footer__license"><?php echo esc_html( $license ); ?></p>

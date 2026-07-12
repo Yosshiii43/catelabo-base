@@ -7,7 +7,7 @@
 
 .p-footer__inner {
 	display: grid;
-	gap: calc(var(--space) * 2.5);
+	gap: calc(var(--space) * 3.5); /* ブロック間の呼吸（ナビ内の行間より明確に大きく） */
 	padding-block: calc(var(--space) * 6) calc(var(--space) * 5);
 	text-align: center;
 }
@@ -23,12 +23,30 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	gap: calc(var(--space) * 1.5) calc(var(--space) * 3);
+	gap: calc(var(--space) * 1) calc(var(--space) * 3); /* ナビ内の行間は密に（クラスタ化） */
 }
 
 .p-footer__menu a {
 	font-size: 13.5px;
 	color: var(--color-ink-sub);
+}
+
+/* 法的リンク（footer_legalメニュー）：主要ナビより一段静かな最終行 */
+.p-footer__legal {
+	margin-top: calc(var(--space) * -2); /* 主要ナビとの意味的つながりを保つため半歩寄せる */
+}
+
+.p-footer__legal-menu {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: calc(var(--space) * 1) calc(var(--space) * 2.5);
+}
+
+.p-footer__legal-menu a {
+	font-size: 12px;
+	color: var(--color-ink-sub);
+	opacity: 0.85;
 }
 
 .p-footer__license {
@@ -40,4 +58,5 @@
 	font-family: var(--font-note);
 	font-size: 12px;
 	color: var(--color-ink-sub);
+	margin-top: calc(var(--space) * 1.5); /* コピーライトを一歩引かせる */
 }
