@@ -125,6 +125,10 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 
 	wp_enqueue_script( 'catelabo-main', $uri . '/assets/js/main.js', array(), $ver, true );
+
+	// 文節折返し（BudouX同梱・29KB/gzip11KB）。word-break:auto-phrase 非対応ブラウザ
+	// （Safari等）でのみ動作し、対応ブラウザではネイティブに任せて即returnする
+	wp_enqueue_script( 'catelabo-phrase', $uri . '/assets/js/phrase-wrap.min.js', array(), $ver, true );
 } );
 
 /* bodyにスキンクラスを付与（レイアウトバリアントの切替にも使う） */
