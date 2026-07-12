@@ -33,6 +33,15 @@ function catelabo_heading_styles() {
 	) );
 }
 
+/** フォントペア一覧（bodyクラス pair-* に出力される。対応スキン＝skin-standard-01系のみ反応） */
+function catelabo_font_pairs() {
+	return apply_filters( 'catelabo_font_pairs', array(
+		'classic' => 'クラシック（明朝・かっちり）',
+		'modern'  => 'モダン（角ゴ・すっきり）',
+		'soft'    => 'ソフト（丸ゴ・やわらか）',
+	) );
+}
+
 /** モーション強度一覧（bodyクラス motion-* に出力される） */
 function catelabo_motion_levels() {
 	return apply_filters( 'catelabo_motion_levels', array(
@@ -131,6 +140,19 @@ add_action( 'customize_register', function ( $wp_customize ) {
 		'section' => 'catelabo_settings',
 		'type'    => 'select',
 		'choices' => catelabo_heading_styles(),
+	) );
+
+	// フォントペア（書体・字間・角丸を1セットで切替。standard-01系スキンで有効）
+	$wp_customize->add_setting( 'catelabo_font_pair', array(
+		'default'           => 'classic',
+		'sanitize_callback' => 'sanitize_key',
+	) );
+	$wp_customize->add_control( 'catelabo_font_pair', array(
+		'label'       => 'フォントペア',
+		'description' => 'スタンダード01系スキンで有効。書体・字間・角丸をムードごと切り替えます。',
+		'section'     => 'catelabo_settings',
+		'type'        => 'select',
+		'choices'     => catelabo_font_pairs(),
 	) );
 
 	// モーション（出現・ホバー演出の強度）

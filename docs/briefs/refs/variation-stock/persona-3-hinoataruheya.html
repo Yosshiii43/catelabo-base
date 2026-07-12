@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案3 陽のあたる部屋 — skin-standard-01 人格スタディ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --skin-base:#FAF8F5;
+  --skin-main:#4C5A68;
+  --skin-accent:#C89A7A;
+  --c-text:#333;
+  --c-text-sub:#767470;
+  --c-line:color-mix(in oklch, var(--skin-main), var(--skin-base) 78%);
+  --c-accent-bg:color-mix(in oklch, var(--skin-accent), var(--skin-base) 88%);
+  --font-h:"Zen Old Mincho",serif;
+  --font-b:"Zen Kaku Gothic New",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--skin-base);color:var(--c-text);font-family:var(--font-b);font-size:15px;line-height:2.05;letter-spacing:.04em;-webkit-font-smoothing:antialiased}
+
+/* ===== 光：このスキンの署名（1） ===== */
+.light{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+   radial-gradient(60% 48% at 82% -6%, color-mix(in oklch, var(--skin-accent), #fff 55%) 0%, transparent 70%),
+   radial-gradient(40% 34% at 8% 30%, color-mix(in oklch, var(--skin-accent), var(--skin-base) 78%) 0%, transparent 75%);
+  opacity:.5}
+
+/* ===== アーチ窓の写真：署名（2） ===== */
+.win{position:relative;overflow:hidden;border-radius:999px 999px 18px 18px;
+  background:
+  radial-gradient(120% 90% at 30% 20%, #EFE8DC 0%, transparent 60%),
+  radial-gradient(100% 100% at 75% 80%, #BDB3A5 0%, transparent 55%),
+  linear-gradient(165deg,#E2DACD 0%, #CCC2B4 55%, #ACA192 100%);
+  box-shadow:0 24px 60px -28px rgba(76,90,104,.35)}
+.win::after{content:"PHOTO";position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.3em;color:rgba(255,255,255,.8)}
+.win-cap{margin-top:16px;font-size:11.5px;letter-spacing:.14em;color:var(--c-text-sub);display:flex;gap:10px;align-items:center}
+.win-cap::before{content:"";width:22px;height:1px;background:var(--skin-accent)}
+
+/* ===== HERO ===== */
+.hero{position:relative;z-index:1;min-height:94vh;display:grid;grid-template-columns:minmax(40px,1fr) minmax(0,1140px) minmax(40px,1fr);align-content:center;padding:60px 0}
+.hero-in{grid-column:2;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(36px,6vw,90px);align-items:end}
+.hero-t{padding-bottom:6vh}
+.hero-t .en{font-size:11px;letter-spacing:.3em;color:var(--skin-accent);margin-bottom:24px}
+.hero-t h1{font-family:var(--font-h);font-weight:500;font-size:clamp(30px,3.6vw,46px);letter-spacing:.12em;line-height:1.95;color:var(--skin-main)}
+.hero-t h1 em{font-style:normal;background:linear-gradient(transparent 68%, var(--c-accent-bg) 68%)}
+.hero-t p.lead{margin-top:30px;font-size:14px;color:var(--c-text-sub)}
+.hero-t .name{margin-top:40px;font-family:var(--font-h);font-size:13px;letter-spacing:.22em;color:var(--skin-main)}
+.hero-v .win{aspect-ratio:4/5.4}
+
+/* ===== ご挨拶：部屋として区切る ===== */
+.room{position:relative;z-index:1;padding:70px 40px 120px}
+.room-in{max-width:1140px;margin:0 auto;background:#fff;border:1px solid var(--c-line);border-radius:26px;padding:clamp(44px,6vw,90px);display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:clamp(36px,5vw,80px);align-items:center;box-shadow:0 30px 80px -50px rgba(76,90,104,.25)}
+.room .tag{display:inline-flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.26em;color:var(--skin-accent);margin-bottom:26px}
+.room .tag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--skin-accent)}
+.room h2{font-family:var(--font-h);font-weight:500;font-size:clamp(22px,2.2vw,27px);letter-spacing:.14em;line-height:2;color:var(--skin-main);margin-bottom:30px}
+.room p{margin-bottom:1.7em;max-width:36em}
+.room .who{margin-top:36px;display:flex;align-items:baseline;gap:16px}
+.room .who .role{font-size:11px;letter-spacing:.18em;color:var(--c-text-sub)}
+.room .who .nm{font-family:var(--font-h);font-size:16px;letter-spacing:.22em;color:var(--skin-main)}
+.room-v .win{aspect-ratio:3/3.8}
+
+@media(max-width:840px){
+  .hero-in,.room-in{grid-template-columns:1fr}
+  .hero-v{order:-1}.hero-v .win{max-width:320px;margin:0 auto}
+  .room{padding:40px 20px 80px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .hero-t,.hero-v{animation:rise 1s ease both}
+  .hero-t{animation-delay:.12s}
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+
+<div class="light" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="hero-t">
+      <p class="en">RAGDOLL CATTERY</p>
+      <h1>陽のあたる部屋で、<br><em>家族になる日</em>を待っています。</h1>
+      <p class="lead">リビングの窓辺がこの子たちの居場所です。家庭の音と匂いの中で、<br>人が大好きな子に育つよう、少数だけを大切に育てています。</p>
+      <p class="name">Ragdoll Cattery Luce ／ キャッテリー・ルーチェ</p>
+    </div>
+    <div class="hero-v">
+      <div class="win"></div>
+      <p class="win-cap">午後2時、いつもの窓辺で</p>
+    </div>
+  </div>
+</header>
+
+<section class="room">
+  <div class="room-in">
+    <div class="room-t">
+      <p class="tag">GREETING ／ ご挨拶</p>
+      <h2>ここは猫舎というより、<br>猫のいる家です。</h2>
+      <p>キャッテリー・ルーチェは、家庭のリビングでラグドールを育てる小さな猫舎です。専用の飼育室ではなく、私たち家族が暮らす空間で、テレビの音や掃除機の音、来客のチャイムにも慣れながら育ちます。</p>
+      <p>お迎えいただいたその日から、新しいおうちに自然と馴染めるように。この家での毎日が、そのままこの子たちの社会化の時間です。</p>
+      <div class="who"><span class="role">代表・ブリーダー</span><span class="nm">山田 花子</span></div>
+    </div>
+    <div class="room-v">
+      <div class="win"></div>
+      <p class="win-cap">母猫のミルと、生後3週の子どもたち</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

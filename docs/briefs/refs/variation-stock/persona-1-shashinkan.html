@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案1 写真館 — skin-standard-01 人格スタディ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --skin-base:#FAF8F5;
+  --skin-main:#4C5A68;
+  --skin-accent:#C89A7A;
+  --c-text:#333;
+  --c-text-sub:#767470;
+  --c-line:color-mix(in oklch, var(--skin-main), var(--skin-base) 75%);
+  --c-accent-bg:color-mix(in oklch, var(--skin-accent), var(--skin-base) 86%);
+  --font-h:"Zen Old Mincho",serif;
+  --font-b:"Zen Kaku Gothic New",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--skin-base);color:var(--c-text);font-family:var(--font-b);font-size:15px;line-height:2;letter-spacing:.04em;-webkit-font-smoothing:antialiased}
+
+/* ===== 額装写真：このスキンの署名 ===== */
+.frame{background:#fff;padding:clamp(14px,2.2vw,26px);box-shadow:0 1px 2px rgba(60,60,55,.08),0 12px 40px -12px rgba(60,60,55,.18);border:1px solid color-mix(in oklch, var(--skin-main), #fff 88%)}
+.frame .ph{position:relative;overflow:hidden}
+.plate{display:flex;align-items:baseline;gap:14px;margin-top:14px}
+.plate .no{font-family:var(--font-h);font-size:11px;letter-spacing:.22em;color:var(--skin-accent)}
+.plate .cap{font-size:11px;letter-spacing:.18em;color:var(--c-text-sub)}
+
+/* 写真プレースホルダー */
+.ph{background:
+  radial-gradient(120% 90% at 30% 20%, #E9E2D8 0%, transparent 60%),
+  radial-gradient(100% 100% at 75% 80%, #B9AFA2 0%, transparent 55%),
+  linear-gradient(160deg,#DDD5C9 0%, #C9BFB2 55%, #A99E90 100%)}
+.ph::after{content:"PHOTO";position:absolute;inset:auto 10px 8px auto;font-family:var(--font-b);font-size:9px;letter-spacing:.3em;color:rgba(255,255,255,.75)}
+
+/* ===== HERO ===== */
+.hero{min-height:92vh;display:grid;grid-template-columns:minmax(48px,1fr) minmax(0,1080px) minmax(48px,1fr);align-content:center;padding:64px 0 88px}
+.hero-in{grid-column:2;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(40px,6vw,96px);align-items:center}
+.hero-t .en{font-family:var(--font-h);font-size:12px;letter-spacing:.34em;color:var(--skin-accent);margin-bottom:26px}
+.hero-t h1{font-family:var(--font-h);font-weight:500;font-size:clamp(30px,3.4vw,44px);letter-spacing:.14em;line-height:1.9;color:var(--skin-main)}
+.hero-t p.lead{margin-top:30px;font-size:14px;color:var(--c-text-sub);letter-spacing:.08em}
+.hero-t .rule{width:52px;height:1px;background:var(--skin-accent);margin:36px 0}
+.hero-t .name{font-family:var(--font-h);font-size:13px;letter-spacing:.2em;color:var(--skin-main)}
+.hero-v .frame{transform:rotate(.4deg)}
+.hero-v .ph{aspect-ratio:4/5}
+
+/* ===== ご挨拶 ===== */
+.greet{padding:110px 48px 130px;border-top:1px solid var(--c-line)}
+.greet-in{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(40px,6vw,110px);align-items:start}
+.greet-v .frame{position:sticky;top:48px;transform:rotate(-.4deg)}
+.greet-v .ph{aspect-ratio:3/4}
+.sec-label{display:flex;align-items:center;gap:16px;margin-bottom:34px}
+.sec-label .en{font-family:var(--font-h);font-size:11px;letter-spacing:.3em;color:var(--skin-accent)}
+.sec-label .line{flex:0 0 40px;height:1px;background:var(--c-line)}
+.greet h2{font-family:var(--font-h);font-weight:500;font-size:clamp(22px,2.2vw,28px);letter-spacing:.16em;line-height:2;color:var(--skin-main);margin-bottom:34px}
+.greet p{margin-bottom:1.8em;max-width:38em}
+.greet .sign{margin-top:44px;text-align:right}
+.greet .sign .role{font-size:11px;letter-spacing:.2em;color:var(--c-text-sub)}
+.greet .sign .who{font-family:var(--font-h);font-size:17px;letter-spacing:.24em;color:var(--skin-main);margin-top:6px}
+
+@media(max-width:820px){
+  .hero-in,.greet-in{grid-template-columns:1fr}
+  .hero{padding:88px 0 64px}
+  .hero-v{order:-1}
+  .greet{padding:80px 24px}
+  .greet-v .frame{position:static}
+}
+@media(prefers-reduced-motion:no-preference){
+  .hero-t,.hero-v{animation:rise .9s ease both}
+  .hero-v{animation-delay:.15s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="hero-t">
+      <p class="en">RAGDOLL CATTERY</p>
+      <h1>一枚の写真に、<br>この子の一生のはじまりを。</h1>
+      <p class="lead">小さな家庭のキャッテリーです。生まれた日から巣立ちの日まで、<br>一頭ずつを記録しながら、大切に育てています。</p>
+      <div class="rule"></div>
+      <p class="name">Cattery Luce ／ ラグドール専門</p>
+    </div>
+    <div class="hero-v">
+      <div class="frame">
+        <div class="ph"></div>
+        <div class="plate"><span class="no">PLATE 01</span><span class="cap">生後62日 ・ ブルーポイントミテッド</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="greet">
+  <div class="greet-in">
+    <div class="greet-v">
+      <div class="frame">
+        <div class="ph"></div>
+        <div class="plate"><span class="no">PLATE 02</span><span class="cap">母猫と、朝のひなたで</span></div>
+      </div>
+    </div>
+    <div class="greet-t">
+      <div class="sec-label"><span class="line"></span><span class="en">GREETING</span></div>
+      <h2>はじめまして。<br>小さな写真館のような猫舎です。</h2>
+      <p>当キャッテリーは、家庭のリビングで少数のラグドールを育てています。ケージに閉じ込めるのではなく、人の暮らしのすぐそばで、抱かれることに慣れた子に育つように。</p>
+      <p>このサイトに並ぶ写真は、すべて日々の記録です。飾らない一枚一枚から、この子たちが過ごしている時間を感じていただけたらうれしく思います。</p>
+      <div class="sign">
+        <p class="role">キャッテリー・ルーチェ 代表</p>
+        <p class="who">山田 花子</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

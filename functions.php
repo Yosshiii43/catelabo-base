@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATELABO_BASE_VER', '0.5.1' );
+define( 'CATELABO_BASE_VER', '0.6.0' );
 
 /* ─────────────────────────────
  * スキン定義
@@ -33,6 +33,17 @@ function catelabo_base_skins() {
       'label'        => 'ノスタルジー（ラベンダー×淡ピンク）',
       'google_fonts' => 'https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@500&family=Noto+Sans+JP:wght@400;500&display=swap',
     ),
+    'standard-01' => array(
+      'label'        => 'スタンダード01（上質な便箋）',
+      // フォールバック（pair_fonts未一致時）＝classic
+      'google_fonts' => 'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+      // フォントペア連動（カスタマイザー「フォントペア」で切替。読み込むのは選択中の1ペア分のみ）
+      'pair_fonts'   => array(
+        'classic' => 'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+        'modern'  => 'https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+        'soft'    => 'https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
+      ),
+    ),
 	);
 	return apply_filters( 'catelabo_base_skins', $skins );
 }
@@ -42,6 +53,13 @@ function catelabo_base_current_skin() {
 	$skin  = get_theme_mod( 'catelabo_skin', 'default' );
 	$skins = catelabo_base_skins();
 	return isset( $skins[ $skin ] ) ? $skin : 'default';
+}
+
+/** 現在のフォントペアキー（未定義キーならclassicへフォールバック。一覧は inc/theme-options.php） */
+function catelabo_current_font_pair() {
+	$pair  = get_theme_mod( 'catelabo_font_pair', 'classic' );
+	$pairs = catelabo_font_pairs();
+	return isset( $pairs[ $pair ] ) ? $pair : 'classic';
 }
 
 /* ─────────────────────────────
@@ -83,11 +101,18 @@ add_action( 'wp_enqueue_scripts', function () {
 	$uri = get_template_directory_uri();
 	$dir = get_template_directory();
 
-	// スキン連動のGoogle Fonts
+	// スキン連動のGoogle Fonts（pair_fontsを持つスキンはフォントペア連動）
 	$skin  = catelabo_base_current_skin();
 	$skins = catelabo_base_skins();
-	if ( ! empty( $skins[ $skin ]['google_fonts'] ) ) {
-		wp_enqueue_style( 'catelabo-fonts', $skins[ $skin ]['google_fonts'], array(), null );
+	$fonts = ! empty( $skins[ $skin ]['google_fonts'] ) ? $skins[ $skin ]['google_fonts'] : '';
+	if ( ! empty( $skins[ $skin ]['pair_fonts'] ) ) {
+		$pair = catelabo_current_font_pair();
+		if ( ! empty( $skins[ $skin ]['pair_fonts'][ $pair ] ) ) {
+			$fonts = $skins[ $skin ]['pair_fonts'][ $pair ];
+		}
+	}
+	if ( $fonts ) {
+		wp_enqueue_style( 'catelabo-fonts', $fonts, array(), null );
 	}
 
 	// コンパイル済みCSS（SCSSソースは assets/scss/。ビルド：sass assets/scss:assets/css --no-source-map）
@@ -108,6 +133,7 @@ add_filter( 'body_class', function ( $classes ) {
 	$classes[] = 'hstyle-' . get_theme_mod( 'catelabo_heading_style', 'line' );
 	$classes[] = 'motion-' . get_theme_mod( 'catelabo_motion', 'soft' );
 	$classes[] = 'klist-' . get_theme_mod( 'catelabo_kitten_list_variant', 'grid' );
+	$classes[] = 'pair-' . catelabo_current_font_pair();
 	return $classes;
 } );
 

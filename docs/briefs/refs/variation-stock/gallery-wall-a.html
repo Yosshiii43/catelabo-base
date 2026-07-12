@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ギャラリー壁A案 — skin-standard-01 子猫紹介セクション</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --skin-base:#FAF8F5;
+  --skin-main:#4C5A68;
+  --skin-accent:#C89A7A;
+  --c-text:#333;
+  --c-text-sub:#767470;
+  --c-line:color-mix(in oklch, var(--skin-main), var(--skin-base) 75%);
+  --c-wall:color-mix(in oklch, var(--skin-main), var(--skin-base) 96%);
+  --status-open:#5C6E4C;
+  --status-talk:#B07B32;
+  --status-done:#9A968B;
+  --font-h:"Zen Old Mincho",serif;
+  --font-b:"Zen Kaku Gothic New",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--skin-base);color:var(--c-text);font-family:var(--font-b);font-size:15px;line-height:2;letter-spacing:.04em;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ═══ 子猫紹介：ギャラリー壁（A案・整然グリッド） ═══ */
+.p-kitten-list{
+  background:var(--c-wall);                      /* 壁：ベースよりわずかに沈む */
+  border-top:1px solid var(--c-line);            /* ピクチャーレール */
+  padding:96px 24px 120px;
+  counter-reset:plate;                            /* プレート連番 */
+}
+.klist-inner{max-width:1120px;margin:0 auto}
+
+.sec-label{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.sec-label .line{flex:0 0 40px;height:1px;background:var(--c-line)}
+.sec-label .en{font-family:var(--font-h);font-size:11px;letter-spacing:.3em;color:var(--skin-accent)}
+.klist-title{font-family:var(--font-h);font-weight:500;font-size:clamp(24px,2.6vw,32px);letter-spacing:.14em;color:var(--skin-main);margin-bottom:14px}
+.klist-lead{font-size:14px;color:var(--c-text-sub);margin-bottom:64px;max-width:38em}
+
+.klist-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:72px 40px;
+}
+@media(min-width:768px){.klist-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.klist-grid{grid-template-columns:repeat(3,1fr);gap:80px 48px}}
+
+/* ── 額装カード ── */
+.p-kitten-card{
+  counter-increment:plate;
+  position:relative;
+  background:#fff;                                /* マット（余白＝額装の白） */
+  padding:16px 16px 0;
+  border:1px solid color-mix(in oklch, var(--skin-main), #fff 86%);
+  box-shadow:0 1px 2px rgba(60,60,55,.06),0 14px 36px -14px rgba(60,60,55,.22);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+/* 掛けられたリズム：ごくわずかな傾きを交互に */
+.p-kitten-card:nth-child(odd){transform:rotate(.35deg)}
+.p-kitten-card:nth-child(even){transform:rotate(-.3deg)}
+
+/* 吊りワイヤー：カード上端からギャップへ短く伸びる */
+.p-kitten-card::before{
+  content:"";
+  position:absolute;
+  top:-48px;left:50%;
+  width:1px;height:48px;
+  background:var(--c-line);
+}
+
+.p-kitten-card:hover{
+  transform:rotate(0deg) translateY(-5px);
+  box-shadow:0 2px 3px rgba(60,60,55,.06),0 24px 48px -16px rgba(60,60,55,.3);
+}
+@media(prefers-reduced-motion:reduce){
+  .p-kitten-card,{transition:none}
+  .p-kitten-card:hover{transform:none}
+}
+
+.p-kitten-card__link{display:block}
+
+.p-kitten-card__photo{position:relative;overflow:hidden;aspect-ratio:4/3;
+  border:1px solid color-mix(in oklch, var(--skin-main), #fff 90%)}
+.p-kitten-card__img,.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ステータス：額の角に掛かる小札 */
+.p-kitten-card__status{
+  position:absolute;top:10px;right:-6px;
+  font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  color:#fff;padding:4px 12px 4px 14px;
+  transform:rotate(1.5deg);
+  box-shadow:0 2px 6px rgba(60,60,55,.25);
+}
+.c-badge--open{background:var(--status-open)}
+.c-badge--talk{background:var(--status-talk)}
+.c-badge--done{background:var(--status-done)}
+[data-status="done"] .p-kitten-card__photo{filter:saturate(.85)}
+
+/* プレート（銘板）：__body がそのまま材料になる */
+.p-kitten-card__body{padding:14px 4px 18px;text-align:left}
+.p-kitten-card__body::before{
+  content:"PLATE " counter(plate, decimal-leading-zero);
+  display:block;
+  font-family:var(--font-h);
+  font-size:10px;letter-spacing:.26em;
+  color:var(--skin-accent);
+  margin-bottom:6px;
+}
+.p-kitten-card__breed{font-size:10.5px;letter-spacing:.2em;color:var(--c-text-sub)}
+.p-kitten-card__name{
+  font-family:var(--font-h);font-weight:500;
+  font-size:19px;letter-spacing:.18em;color:var(--skin-main);
+  line-height:1.6;margin:2px 0 6px;
+}
+.p-kitten-card__meta{font-size:12px;letter-spacing:.08em;color:var(--c-text-sub)}
+.p-kitten-card__age{margin-left:.4em}
+
+/* 写真プレースホルダー（モック用・実装ではimgが入る） */
+.ph{background:
+  radial-gradient(120% 90% at 30% 20%, #E9E2D8 0%, transparent 60%),
+  radial-gradient(100% 100% at 75% 80%, #B9AFA2 0%, transparent 55%),
+  linear-gradient(160deg,#DDD5C9 0%, #C9BFB2 55%, #A99E90 100%)}
+.ph::after{content:"PHOTO";position:absolute;right:10px;bottom:8px;font-size:9px;letter-spacing:.3em;color:rgba(255,255,255,.75)}
+.ph[data-v="2"]{filter:hue-rotate(14deg) brightness(1.04)}
+.ph[data-v="3"]{filter:hue-rotate(-10deg) brightness(.97)}
+.ph[data-v="4"]{filter:brightness(1.07)}
+.ph[data-v="5"]{filter:hue-rotate(8deg) brightness(.94)}
+.ph[data-v="6"]{filter:hue-rotate(-16deg)}
+
+/* 出現モーション（c-reveal 相当の見立て） */
+@media(prefers-reduced-motion:no-preference){
+  .p-kitten-card{animation:hang .7s ease backwards}
+  .p-kitten-card:nth-child(2){animation-delay:.08s}
+  .p-kitten-card:nth-child(3){animation-delay:.16s}
+  .p-kitten-card:nth-child(4){animation-delay:.24s}
+  .p-kitten-card:nth-child(5){animation-delay:.32s}
+  .p-kitten-card:nth-child(6){animation-delay:.4s}
+  @keyframes hang{from{opacity:0;transform:translateY(10px)}}
+}
+</style>
+</head>
+<body>
+
+<section class="p-kitten-list">
+  <div class="klist-inner">
+    <div class="sec-label"><span class="line"></span><span class="en">GALLERY</span></div>
+    <h2 class="klist-title">子猫たちのご紹介</h2>
+    <p class="klist-lead">いま募集中の子と、新しい家族が決まった子。一枚ずつ、日々の記録から選んだ写真でご紹介します。</p>
+
+    <div class="klist-grid">
+
+      <article class="p-kitten-card" data-status="open">
+        <a class="p-kitten-card__link" href="#">
+          <div class="p-kitten-card__photo">
+            <div class="ph" data-v="1"></div>
+            <span class="p-kitten-card__status c-badge c-badge--open">募集中</span>
+          </div>
+          <div class="p-kitten-card__body">
+            <p class="p-kitten-card__breed">ラグドール</p>
+            <h2 class="p-kitten-card__name">すずちゃん</h2>
+            <p class="p-kitten-card__meta">2026年5月2日生まれ<span class="p-kitten-card__age">（生後71日）</span></p>
+          </div>
+        </a>
+      </article>
+
+      <article class="p-kitten-card" data-status="open">
+        <a class="p-kitten-card__link" href="#">
+          <div class="p-kitten-card__photo">
+            <div class="ph" data-v="2"></div>
+            <span class="p-kitten-card__status c-badge c-badge--open">募集中</span>
+          </div>
+          <div class="p-kitten-card__body">
+            <p class="p-kitten-card__breed">ラグドール</p>
+            <h2 class="p-kitten-card__name">こまるくん</h2>
+            <p class="p-kitten-card__meta">2026年5月2日生まれ<span class="p-kitten-card__age">（生後71日）</span></p>
+          </div>
+        </a>
+      </article>
+
+      <article class="p-kitten-card" data-status="talk">
+        <a class="p-kitten-card__link" href="#">
+          <div class="p-kitten-card__photo">
+            <div class="ph" data-v="3"></div>
+            <span class="p-kitten-card__status c-badge c-badge--talk">商談中</span>
+          </div>
+          <div class="p-kitten-card__body">
+            <p class="p-kitten-card__breed">ラグドール</p>
+            <h2 class="p-kitten-card__name">ゆきひらくん</h2>
+            <p class="p-kitten-card__meta">2026年4月18日生まれ<span class="p-kitten-card__age">（生後85日）</span></p>
+          </div>
+        </a>
+      </article>
+
+      <article class="p-kitten-card" data-status="open">
+        <a class="p-kitten-card__link" href="#">
+          <div class="p-kitten-card__photo">
+            <div class="ph" data-v="4"></div>
+            <span class="p-kitten-card__status c-badge c-badge--open">募集中</span>
+          </div>
+          <div class="p-kitten-card__body">
+            <p class="p-kitten-card__breed">ラグドール</p>
+            <h2 class="p-kitten-card__name">もなかちゃん</h2>
+            <p class="p-kitten-card__meta">2026年6月10日生まれ<span class="p-kitten-card__age">（生後32日）</span></p>
+          </div>
+        </a>
+      </article>
+
+      <article class="p-kitten-card" data-status="talk">
+        <a class="p-kitten-card__link" href="#">
+          <div class="p-kitten-card__photo">
+            <div class="ph" data-v="5"></div>
+            <span class="p-kitten-card__status c-badge c-badge--talk">商談中</span>
+          </div>
+          <div class="p-kitten-card__body">
+            <p class="p-kitten-card__breed">ラグドール</p>
+            <h2 class="p-kitten-card__name">はくちゃん</h2>
+            <p class="p-kitten-card__meta">2026年4月18日生まれ<span class="p-kitten-card__age">（生後85日）</span></p>
+          </div>
+        </a>
+      </article>
+
+      <article class="p-kitten-card" data-status="done">
+        <a class="p-kitten-card__link" href="#">
+          <div class="p-kitten-card__photo">
+            <div class="ph" data-v="6"></div>
+            <span class="p-kitten-card__status c-badge c-badge--done">ご家族決定</span>
+          </div>
+          <div class="p-kitten-card__body">
+            <p class="p-kitten-card__breed">ラグドール</p>
+            <h2 class="p-kitten-card__name">おもちくん</h2>
+            <p class="p-kitten-card__meta">2026年3月30日生まれ<span class="p-kitten-card__age">（生後104日）</span></p>
+          </div>
+        </a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
