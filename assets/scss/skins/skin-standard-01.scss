@@ -24,7 +24,7 @@
 
 	--skin-base:   #F6F4EF; /* 紙色（ページ背景。明るい色を想定） */
 	--skin-main:   #46586A; /* 主役色（ボタン・見出しラベル・募集中バッジ） */
-	--skin-accent: #A8865A; /* 差し色（控えめに使用） */
+	--skin-accent: #937218; /* 差し色（控えめに使用。既定＝黄金。罫と商談中バッジに派生） */
 
 	/* ═══════════ ここから下は自動派生（案件個別の補正時のみ触る） ═══════════ */
 
@@ -56,6 +56,9 @@
 	--color-status-ink:  #FFFFFF;
 	--color-on-photo:    #FFFFFF;
 
+	/* ── 装飾用アクセント（罫線・箔押し的ディテール専用。文字には使わない） ── */
+	--std-accent-deco: var(--skin-accent);
+
 	/* ── 形・質感の既定はペアが持つ（下のpair-*ブロック）。
 	      ここではペアクラス未付与時の保険として classic 相当を敷く ── */
 	--font-heading: "Shippori Mincho B1", "Hiragino Mincho ProN", serif;
@@ -83,6 +86,7 @@
 	:root {
 		--color-primary:     oklch(from var(--skin-main) min(l, 0.52) c h);
 		--color-status-talk: oklch(from var(--skin-accent) min(l, 0.55) c h);
+		--std-accent-deco:   oklch(from var(--skin-accent) min(l, 0.72) c h); /* 淡色でも罫が消えない */
 	}
 }
 
@@ -144,4 +148,82 @@ body.pair-soft {
 .p-page__content h2 {
 	font-weight: var(--std-h-weight);
 	letter-spacing: var(--std-h-tracking);
+	font-feature-settings: "palt" 1; /* 詰め組み。「組んである」見出しの土台 */
+}
+
+/* ═══════════ Phase B-1：ヒーローの磨き ═══════════
+ * 骨格（グリッド・バリアント構成）はdefaultのまま。§4の磨き所のみ。
+ * §9-1確認済み：上書きは background/opacity（divider）・border-width（ghost）のみで
+ * ベースの寸法・配置プロパティには触れていない。 */
+
+.p-hero {
+
+	/* タイポの調律：改行バランス＋最大値を3remに抑制（52pxは便箋には大声すぎる） */
+	&__title {
+		text-wrap: balance;
+		font-size: rclamp(30, 48, 375, 1440);
+	}
+
+	/* 余白のグルーピング：eyebrow〜罫を一塊に締め、本文との間に呼吸を置く
+	 * （eyebrow下24→16 / 罫の上下を対称20-30→非対称 上14-18・下32-44） */
+	&__eyebrow {
+		margin-bottom: rem(16);
+	}
+
+	/* 箔押しの罫：インクの灰線 → 差し色の1pxヘアライン（アクセントの居場所①） */
+	&__divider {
+		background: var(--std-accent-deco);
+		opacity: 1;
+		margin-block: rclamp(14, 18, 375, 1440) rclamp(32, 44, 375, 1440);
+	}
+
+	/* 本文の呼吸 */
+	&__text {
+		letter-spacing: 0.01em;
+	}
+}
+
+/* 金の罫をセクション見出し・下層h1へ展開（page.php h1も同じc-heading構造＝一括で効く）
+ * クラスタの原則はここでも同じ：label＋title＋罫が一塊、その下に大きな呼吸（既存mb 32-56） */
+.c-heading::after {
+	content: "";
+	display: block;
+	width: rem(44);
+	height: 1px;
+	background: var(--std-accent-deco);
+	margin-top: rclamp(14, 18, 375, 1440);
+	margin-inline: auto;
+}
+
+.c-heading--left::after {
+	margin-inline: 0;
+}
+
+/* ナビをボタン（font-heading）と統一。ペア切替でナビの書体も連動する */
+.p-header__menu a {
+	font-family: var(--font-heading);
+}
+
+/* ═══════════ 触感：ボタンの精度（サイト全域） ═══════════ */
+
+/* 細い枠ほど上質に読める。1.5px → 1px */
+.c-btn--ghost {
+	border-width: 1px;
+}
+
+/* 浮き上がり(-2px)は可愛らしさに振れるため廃止。応答は色だけで返す */
+.c-btn:hover {
+	transform: none;
+}
+
+.c-btn--primary:hover {
+	background: color-mix(in oklch, var(--color-primary), var(--std-ink) 12%);
+}
+
+.c-btn--ghost:hover {
+	background: color-mix(in srgb, var(--std-ink) 6%, transparent);
+}
+
+.c-btn--primary:active {
+	background: color-mix(in oklch, var(--color-primary), var(--std-ink) 20%);
 }
