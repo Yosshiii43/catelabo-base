@@ -104,16 +104,18 @@ body.pair-classic {
 	--shadow-card: none;
 }
 
-/* ── modern：角ゴの精度。影の世界・最小限の角丸 ── */
+/* ── modern：直線の精度。影の世界・完全なスクエア ──
+ * 見出しは IBM Plex Sans JP（本文Notoと骨格の違う技術的な角ゴ）。
+ * 書体対比を持たない代わりに、ウェイト差(600)と直角が「精度」の署名になる */
 body.pair-modern {
-	--font-heading: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
-	--std-h-weight:   500;
-	--std-h-tracking: 0.03em;
-	--radius-xs: 2px;
-	--radius-s:  2px;
-	--radius-m:  4px;
-	--radius-l:  8px;
-	--radius-btn: 2px;
+	--font-heading: "IBM Plex Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+	--std-h-weight:   600;
+	--std-h-tracking: 0.02em;
+	--radius-xs: 0px;
+	--radius-s:  0px;
+	--radius-m:  2px;
+	--radius-l:  4px;
+	--radius-btn: 0px;
 	--border-card: none;
 	--shadow-card: 0 10px 30px -20px color-mix(in srgb, var(--std-ink) 45%, transparent);
 }
