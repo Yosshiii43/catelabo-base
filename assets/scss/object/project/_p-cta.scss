@@ -14,6 +14,8 @@
 
 	&__title {
 		font-size: rclamp(20, 26, 375, 1440);
+		text-wrap: balance;      /* 2行時に行長を均す */
+		word-break: auto-phrase; /* 文節折返し（Chromium。非対応は通常折返し） */
 
 		/* SP: 広いトラッキングを縮小して孤立改行を防ぐ（全スキン共通） */
 		@include mq(sp) {
@@ -26,9 +28,10 @@
 		margin-bottom: rem(24);
 		font-size: rem(14.5);
 		opacity: 0.9;
+		text-wrap: pretty;       /* 短い最終行の孤立を避ける */
+		word-break: auto-phrase;
 
-		@include mq(sp) {
-			text-align: left;
-		}
+		/* 中央揃えのまま維持する。かつてSPで左寄せにしていたが、
+		 * pretty / auto-phrase の導入で孤立改行が解消されたため中央に戻した（2026-07-13） */
 	}
 }
