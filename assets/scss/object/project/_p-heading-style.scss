@@ -1,7 +1,10 @@
 @use "../../foundation/functions" as *;
 @use "../../foundation/mixins" as *;
 
-/* object/component/c-section-title — セクション見出しの書式と装飾
+/* object/project/p-heading-style — 見出し装飾スタイルの一元管理（差別化レバー）
+ *
+ * 注意: .p-heading-style というクラスは存在しない。このファイルは
+ * 複数のp-要素に散らばる見出しセレクタを横断制御する「機能モジュール」
  *
  * 対象セレクタ（詳細ページ・固定ページ本文のh2・法定表示）を一元管理し、
  * 装飾は body の hstyle-* クラス（カスタマイザー「見出しの装飾スタイル」）で切り替える。
