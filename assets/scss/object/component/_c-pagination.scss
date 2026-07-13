@@ -1,0 +1,69 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/component/c-pagination — 一覧のページ送り
+ *
+ * markup: nav.c-pagination > ul.c-pagination__list > li.c-pagination__item
+ * li の中身は paginate_links()（archive-kitten.php）の出力をそのまま受ける。
+ * WPが付けるクラス: .page-numbers（全要素）/ .current / .dots / .prev / .next
+ * 色・形は全てトークン経由なのでスキン側の追加対応は原則不要。
+ */
+
+.c-pagination {
+	margin-top: rclamp(40, 64, 375, 1440);
+
+	&__list {
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: rem(8);
+		margin: 0;
+		padding: 0;
+	}
+
+	&__item {
+		margin: 0;
+	}
+
+	.page-numbers {
+		display: grid;
+		place-items: center;
+		min-width: rem(44); /* タップターゲット44px確保（読者は40〜60代中心） */
+		min-height: rem(44);
+		padding: 0 rem(12);
+		font-family: var(--font-note);
+		font-size: rem(14);
+		letter-spacing: 0.06em;
+		color: var(--color-ink);
+		background: var(--color-surface);
+		border: 1px solid var(--color-line);
+		border-radius: var(--radius-btn);
+		text-decoration: none;
+		transition: color 0.2s ease, border-color 0.2s ease;
+
+		&.current {
+			color: var(--color-primary-ink);
+			background: var(--color-primary);
+			border-color: var(--color-primary);
+		}
+
+		&.dots {
+			min-width: rem(24);
+			padding: 0;
+			background: none;
+			border: none;
+			color: var(--color-ink-sub);
+		}
+
+		&.prev,
+		&.next {
+			padding: 0 rem(16);
+		}
+	}
+
+	a.page-numbers:hover {
+		color: var(--color-primary);
+		border-color: var(--color-primary);
+	}
+}

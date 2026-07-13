@@ -1,0 +1,104 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/component/c-faq — よくある質問（<details>/<summary> 方式）
+ *
+ * ブロックエディタの「カスタムHTML」に貼るスニペットは docs/briefs/固定ページ雛形.md を参照。
+ * markup:
+ *   div.c-faq
+ *     details.c-faq__item
+ *       summary.c-faq__q（質問文）
+ *       div.c-faq__a > p（回答文）
+ *
+ * アコーディオンでもSEO上の不利はない（折りたたみ内も通常どおりインデックスされる）。
+ * JSは使わずブラウザ標準の開閉に任せる。
+ */
+
+.c-faq {
+	display: grid;
+	gap: rem(12);
+
+	&__item {
+		background: var(--color-surface);
+		border: var(--border-card);
+		border-radius: var(--radius-m);
+		overflow: hidden; /* 角丸の内側に収める */
+	}
+
+	&__q {
+		display: flex;
+		align-items: baseline;
+		gap: rem(12);
+		padding: rem(18) rem(20);
+		padding-right: rem(48); /* 開閉矢印の逃げ */
+		position: relative;
+		cursor: pointer;
+		font-family: var(--font-heading);
+		font-size: rem(16);
+		line-height: 1.6;
+		list-style: none; /* 標準の▶マーカーを消す */
+
+		&::-webkit-details-marker {
+			display: none; /* Safari向け */
+		}
+
+		/* Qマーカー */
+		&::before {
+			content: "Q";
+			width: rem(24);
+			flex-shrink: 0;
+			text-align: center;
+			font-family: var(--font-heading);
+			font-size: rem(18);
+			line-height: 1;
+			color: var(--color-primary);
+		}
+
+		/* 開閉矢印（開くと上向きに） */
+		&::after {
+			@include arrow(8, 2, var(--color-ink-sub), 'bottom');
+			right: rem(20);
+			top: calc(50% - #{rem(6)});
+			transition: transform 0.25s ease;
+		}
+	}
+
+	&__item[open] &__q::after {
+		transform: rotate(225deg); /* 'bottom'(45deg)の反転＝上向き */
+	}
+
+	&__a {
+		/* 左列=Aマーカー / 右列=回答本文（複数段落OK） */
+		display: grid;
+		grid-template-columns: rem(24) 1fr;
+		column-gap: rem(12);
+		padding: 0 rem(20) rem(20);
+
+		/* Aマーカー（Qと同じ幅で縦を揃える） */
+		&::before {
+			content: "A";
+			grid-column: 1;
+			text-align: center;
+			font-family: var(--font-heading);
+			font-size: rem(18);
+			line-height: 1.8; /* 本文1行目と目線を揃える */
+			color: var(--color-accent);
+		}
+
+		> * {
+			grid-column: 2;
+			margin: 0;
+			min-width: 0;
+		}
+
+		> * + * {
+			margin-top: rem(8);
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.c-faq__q::after {
+		transition: none;
+	}
+}

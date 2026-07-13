@@ -7,6 +7,61 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * パンくずの経路データ（単一情報源）。
+ * 表示は template-parts/breadcrumb.php、JSON-LD(BreadcrumbList)は下のwp_headが
+ * 同じこの関数から出力する。対象は子猫詳細・親猫詳細・下層固定ページのみ（TOP不要）。
+ *
+ * @return array{label:string,url:string}[] 経路。対象外のページでは空配列。
+ */
+function catelabo_breadcrumb_trail() {
+	$trail = array();
+
+	if ( is_front_page() || ! ( is_singular( 'kitten' ) || is_singular( 'parent_cat' ) || is_page() ) ) {
+		return $trail;
+	}
+
+	$qid = get_queried_object_id();
+
+	$trail[] = array(
+		'label' => 'ホーム',
+		'url'   => home_url( '/' ),
+	);
+
+	if ( is_singular( 'kitten' ) ) {
+		$archive = get_post_type_archive_link( 'kitten' );
+		if ( $archive ) {
+			$trail[] = array(
+				'label' => '子猫のご案内',
+				'url'   => $archive,
+			);
+		}
+	} elseif ( is_singular( 'parent_cat' ) ) {
+		$archive = get_post_type_archive_link( 'parent_cat' );
+		if ( $archive ) {
+			$trail[] = array(
+				'label' => '親猫のご紹介',
+				'url'   => $archive,
+			);
+		}
+	} elseif ( is_page() ) {
+		// 親ページがあれば経路に挟む（上の階層から順に）
+		foreach ( array_reverse( get_post_ancestors( $qid ) ) as $ancestor_id ) {
+			$trail[] = array(
+				'label' => get_the_title( $ancestor_id ),
+				'url'   => get_permalink( $ancestor_id ),
+			);
+		}
+	}
+
+	$trail[] = array(
+		'label' => get_the_title( $qid ),
+		'url'   => '', // 現在地はリンクしない
+	);
+
+	return $trail;
+}
+
 add_action( 'wp_head', function () {
 
 	$title = wp_get_document_title();
@@ -102,6 +157,29 @@ add_action( 'wp_head', function () {
 		}
 
 		echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
+	}
+
+	// パンくず: JSON-LD（BreadcrumbList）。表示側は template-parts/breadcrumb.php
+	$trail = catelabo_breadcrumb_trail();
+	if ( count( $trail ) >= 2 ) {
+		$bc_items = array();
+		foreach ( $trail as $i => $crumb ) {
+			$bc_item = array(
+				'@type'    => 'ListItem',
+				'position' => $i + 1,
+				'name'     => $crumb['label'],
+			);
+			if ( ! empty( $crumb['url'] ) ) {
+				$bc_item['item'] = $crumb['url'];
+			}
+			$bc_items[] = $bc_item;
+		}
+		$bc_data = array(
+			'@context'        => 'https://schema.org',
+			'@type'           => 'BreadcrumbList',
+			'itemListElement' => $bc_items,
+		);
+		echo '<script type="application/ld+json">' . wp_json_encode( $bc_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
 	}
 	echo "<!-- /Catelabo OGP -->\n";
 }, 5 );

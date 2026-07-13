@@ -279,9 +279,11 @@ body.skin-standard-01 {
 
 	/* 境界罫は画面端まで伸ばさない（便箋の罫は紙の中に引く）。
 	 * borderではなく背景グラデーションで「コンテナ幅・中央寄せ・上端」に描画。
-	 * 高精細ディスプレイでは0.5pxのヘアラインに（DPR1環境は1pxが最良） */
-	.l-section:has(.p-kitten-list),
-	.l-section:has(.p-parent-list) {
+	 * 高精細ディスプレイでは0.5pxのヘアラインに（DPR1環境は1pxが最良）
+	 * :not(.p-kitten-detail)＝一覧「セクション」専用の罫。親猫詳細は記事内に
+	 * 子猫一覧(.p-kitten-list)を含むため、除外しないと記事上端＝パンくず直下に罫が出る */
+	.l-section:has(.p-kitten-list):not(.p-kitten-detail),
+	.l-section:has(.p-parent-list):not(.p-kitten-detail) {
 		background-image: linear-gradient(var(--std-main-line), var(--std-main-line));
 		background-repeat: no-repeat;
 		background-position: top center;
