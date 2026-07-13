@@ -280,10 +280,13 @@ body.skin-standard-01 {
 	/* 境界罫は画面端まで伸ばさない（便箋の罫は紙の中に引く）。
 	 * borderではなく背景グラデーションで「コンテナ幅・中央寄せ・上端」に描画。
 	 * 高精細ディスプレイでは0.5pxのヘアラインに（DPR1環境は1pxが最良）
-	 * :not(.p-kitten-detail)＝一覧「セクション」専用の罫。親猫詳細は記事内に
-	 * 子猫一覧(.p-kitten-list)を含むため、除外しないと記事上端＝パンくず直下に罫が出る */
-	.l-section:has(.p-kitten-list):not(.p-kitten-detail),
-	.l-section:has(.p-parent-list):not(.p-kitten-detail) {
+	 *
+	 * `.l-main > * +` ＝「前に別の要素（ヒーロー等）があるセクション」だけに引く。
+	 * 境界とは2つの面の間のことなので、main先頭（子猫一覧・親猫一覧ページ）には引かない。
+	 * :not(.p-kitten-detail)＝親猫詳細は記事内に子猫一覧を含み、かつ前にパンくずが
+	 * 立つため sibling条件だけでは巻き込まれる。詳細記事は罫の対象外として明示除外 */
+	.l-main > * + .l-section:has(.p-kitten-list):not(.p-kitten-detail),
+	.l-main > * + .l-section:has(.p-parent-list):not(.p-kitten-detail) {
 		background-image: linear-gradient(var(--std-main-line), var(--std-main-line));
 		background-repeat: no-repeat;
 		background-position: top center;
@@ -297,6 +300,13 @@ body.skin-standard-01 {
 	.p-cta {
 		background: var(--skin-main);
 		color: var(--std-cta-ink);
+	}
+
+	/* CTA帯のフォーカスリングも明暗自動判定インクで。
+	 * ベースは --color-primary-ink(白固定)だが、mainが淡色の場合は帯上の文字と同じ
+	 * 濃色インクでないとリングが背景に沈む */
+	.p-cta :focus-visible {
+		outline-color: var(--std-cta-ink);
 	}
 
 	.p-cta__title,

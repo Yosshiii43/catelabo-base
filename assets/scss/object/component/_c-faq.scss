@@ -42,6 +42,16 @@
 			display: none; /* Safari向け */
 		}
 
+		/* ベースの :focus-visible は outline-offset: 3px で要素の外側に描くが、
+		 * ここでは __item の overflow: hidden（角丸クリップ）に切り落とされて
+		 * 「閉時=不可視 / 開時=下辺の切れ端だけ見える」事故になる。
+		 * リングを内側に描き、カードの角丸に沿わせて全周可視にする */
+		&:focus-visible {
+			outline: 2px solid var(--color-primary);
+			outline-offset: -4px;
+			border-radius: var(--radius-m);
+		}
+
 		/* Qマーカー */
 		&::before {
 			content: "Q";

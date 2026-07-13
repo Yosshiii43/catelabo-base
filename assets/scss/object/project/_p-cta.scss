@@ -7,6 +7,12 @@
 	background: var(--color-primary);
 	color: var(--color-primary-ink);
 
+	/* 帯の背景がprimary色のため、既定のフォーカスリング(primary)は同化して消える。
+	 * 帯上では「帯上の文字色」でリングを描く（ボタン等の全フォーカス対象に適用） */
+	:focus-visible {
+		outline-color: var(--color-primary-ink);
+	}
+
 	&__inner {
 		text-align: center;
 		padding-block: rclamp(48, 72, 375, 1440);
