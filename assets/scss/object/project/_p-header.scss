@@ -107,6 +107,7 @@
 .p-header__menu a {
 	display: block;
 	padding: calc(var(--space) * 1.25) 0;
+	font-family: var(--font-heading); /* ボタン(c-btn)と声を揃える。スキン側の味付け(字間等)は各スキンに委ねる */
 	font-weight: 500;
 	border-bottom: 1px solid var(--color-line);
 }
