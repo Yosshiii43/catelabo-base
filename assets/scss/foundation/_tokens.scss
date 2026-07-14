@@ -37,6 +37,7 @@
 	--radius-l: 20px;
 	--radius-btn: var(--radius-xs); /* ボタン専用。999pxにするとピル型 */
 	--shadow-card: 0 10px 30px -18px rgba(58, 58, 51, 0.35);
+	--shadow-lift: 0 12px 28px -14px rgba(58, 58, 51, 0.30); /* hoverの持ち上げ影（知覚下限の保証。世界観に合わないスキンは none に） */
 	--border-card: 1px solid var(--color-line); /* 線の世界／影の世界の切替に使う */
 
 	/* ── 寸法 ── */

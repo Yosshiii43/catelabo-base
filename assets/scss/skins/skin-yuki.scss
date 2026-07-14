@@ -36,6 +36,7 @@
 	--radius-l:  6px;
 	--radius-btn: 2px;
 	--shadow-card: none;
+	--shadow-lift: none; /* 脱カード＝フラット写真に影は異物。hover応答はズームが担う */
 	--border-card: 1px solid var(--color-line);
 
 	--container:   1120px;
@@ -511,6 +512,15 @@ body {
 }
 
 .p-kitten-card:hover .p-kitten-card__img {
+	transform: scale(1.045);
+}
+
+/* 親猫カードも子猫カードと同じズーム文法（タスク4） */
+.p-parent-card__photo img {
+	transition: transform 0.6s cubic-bezier(0.2, 0.65, 0.25, 1);
+}
+
+a.p-parent-card:hover .p-parent-card__photo img {
 	transform: scale(1.045);
 }
 

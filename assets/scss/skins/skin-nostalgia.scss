@@ -373,6 +373,15 @@
 	filter: saturate(1.10) brightness(1.03);
 }
 
+/* 親猫カードも子猫カードと同じhover文法：持ち上げ影(--shadow-liftをベースから継承)＋彩度上げ（タスク4） */
+.p-parent-card__photo img {
+	transition: filter 0.5s ease;
+}
+
+a.p-parent-card:hover .p-parent-card__photo img {
+	filter: saturate(1.10) brightness(1.03);
+}
+
 .p-kitten-card__body {
 	padding-bottom: rem(24); /* 台紙の下余白 */
 }

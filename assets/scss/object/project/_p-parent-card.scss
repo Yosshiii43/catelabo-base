@@ -52,11 +52,12 @@
 
 /* リンク（親猫が登録済み）の場合のホバー */
 a.p-parent-card {
-	transition: transform 0.2s ease;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
 
 	&:hover {
 		opacity: 1;
 		transform: translateY(rem(-4)); /* -2pxは知覚できないため子猫カードと同量に */
+		box-shadow: var(--shadow-lift); /* 安静時は影なし→hoverで生まれる（タスク4） */
 	}
 }
 
