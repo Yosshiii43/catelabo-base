@@ -3,7 +3,13 @@
 <footer class="p-footer">
 	<div class="p-footer__inner l-container">
 
-		<p class="p-footer__brand"><?php bloginfo( 'name' ); ?></p>
+		<p class="p-footer__brand">
+			<?php if ( has_custom_logo() ) : ?>
+				<?php the_custom_logo(); // ロゴ設定時はヘッダーと同じロゴ（ホームへのリンク込み）を小さく ?>
+			<?php else : ?>
+				<a class="p-footer__brand-link" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>
+			<?php endif; ?>
+		</p>
 
 		<nav class="p-footer__nav" aria-label="フッターメニュー">
 			<?php

@@ -77,8 +77,10 @@ body::before {
 	border-width: 1px;
 }
 
-.c-btn--primary:hover,
-.c-btn--ghost:hover {
+/* ボタンは動かず、薄くなる（全バリアント共通。
+ * 以前は--primary/--ghostの列挙だったため--inverse＝CTA帯のボタンだけ
+ * ベースの浮き(translateY -2px)が素通りしていた。列挙をやめて再発防止 */
+.c-btn:hover {
 	transform: none;
 	opacity: 0.72;
 }

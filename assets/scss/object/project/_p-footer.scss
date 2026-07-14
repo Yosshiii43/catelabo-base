@@ -19,6 +19,18 @@
 	letter-spacing: 0.08em;
 }
 
+/* 猫舎名のホームリンク。色はブランド行の指定（スキン上書き含む）を継承し、
+ * hoverはベースのリンク既定（opacityフェード）に乗る */
+.p-footer__brand-link {
+	color: inherit;
+}
+
+/* ロゴ設定時（the_custom_logo）はヘッダーより一回り小さく */
+.p-footer__brand .custom-logo {
+	max-height: 36px;
+	width: auto;
+}
+
 .p-footer__menu {
 	display: flex;
 	flex-wrap: wrap;
