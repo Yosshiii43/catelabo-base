@@ -1,0 +1,59 @@
+@use "../../foundation/functions" as *;
+@use "../../foundation/mixins" as *;
+
+/* object/project/p-styleguide — コンポーネント見本ページ（開発用）の骨組み
+ *
+ * markup: page-styleguide.php
+ * 役割は「注釈と並べ方」だけ。見本対象のコンポーネント自体には一切干渉しないこと
+ * （干渉すると見本の意味がなくなる）。全てトークン経由＝どのスキンでも読める。 */
+
+.p-styleguide {
+
+	&__intro {
+		max-width: 46em;
+		line-height: 1.9;
+		color: var(--color-ink-sub);
+	}
+
+	/* セクションの注釈ヘッダー */
+	&__head {
+		margin-bottom: rem(28);
+		padding-bottom: rem(12);
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	&__title {
+		font-family: var(--font-note);
+		font-size: rem(13);
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		color: var(--color-ink-sub);
+	}
+
+	&__check {
+		margin-top: rem(6);
+		font-family: var(--font-note);
+		font-size: rem(12.5);
+		line-height: 1.8;
+		color: var(--color-ink-sub);
+
+		&::before {
+			content: "確認 ▸ ";
+			color: var(--color-primary);
+		}
+	}
+
+	/* 横並びの見本（ボタン・バッジ） */
+	&__row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: rem(16);
+
+		& + & {
+			margin-top: rem(24);
+		}
+	}
+
+	/* 親猫カードの見本は実物の .p-parent-list に載せる（独自グリッドは作らない） */
+}

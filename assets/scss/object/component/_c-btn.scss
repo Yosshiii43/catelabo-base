@@ -12,6 +12,13 @@
 	line-height: 1;
 	padding: calc(var(--space) * 1.75) calc(var(--space) * 3.5);
 	border-radius: var(--radius-btn);
+	/* <button>/<input type=submit> でも使えるようUAスタイルを打ち消す
+	 * （フォーム送信ボタンには class="c-btn c-btn--primary" を付ける運用。--ghostのborderは自前定義が勝つ） */
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
 	transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 

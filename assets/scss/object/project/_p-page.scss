@@ -112,8 +112,12 @@
 		}
 	}
 
-	input[type="submit"],
-	button[type="submit"] {
+	/* 送信ボタンのフォールバック（class無しの場合のみ）。
+	 * 推奨はボタンにc-btnを付けること — CF7なら [submit class:c-btn class:c-btn--primary "送信する"]。
+	 * c-btnが付けばスキンのボタン上書き（動き・色応答）に自動追従する。
+	 * ここは付け忘れ保険なので静的（hoverの動きはスキン管轄のため持たない） */
+	input[type="submit"]:not(.c-btn),
+	button[type="submit"]:not(.c-btn) {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -129,11 +133,6 @@
 		margin-top: rem(8);
 		cursor: pointer;
 		box-shadow: var(--shadow-card);
-		transition: transform 0.2s ease;
-
-		&:hover {
-			transform: translateY(rem(-2));
-		}
 	}
 
 	.wpcf7-not-valid-tip {
