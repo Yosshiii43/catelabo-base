@@ -627,6 +627,14 @@ a.p-parent-card:hover .p-parent-card__photo img {
 
 /* ══ 10. モーションの署名（このスキン独自の動き方） ══ */
 
+/* 額装した写真は額の下でズームしない。
+ * ベースの slow-zoom（rich時 scale 1.06→1・8s）は写真の縁が額縁側にはみ出し、
+ * 設計上14px（SP 8px）の写真↔額縁の間隔を序盤に数pxまで潰す＝「額縁ズレ」の正体。
+ * yukiは写真を額装してマットごと見せる世界観のため、演出ごと無効化する（タスク7） */
+.js.motion-rich .p-hero__media img {
+	animation: none;
+}
+
 /* 出現＝雪がほどけるように、ブラーが晴れながら立ち上がる */
 .js.motion-soft .c-reveal,
 .js.motion-rich .c-reveal {

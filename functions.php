@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CATELABO_BASE_VER', '0.9.2' );
+define( 'CATELABO_BASE_VER', '0.9.3' );
 
 /* ─────────────────────────────
  * スキン定義
