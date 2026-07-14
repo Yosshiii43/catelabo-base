@@ -22,3 +22,13 @@
  * }
  * ※Google Fontsの変更は functions.php の catelabo_base_skins() に登録する。
  * ──────────────────────────────────────────────── */
+
+/* ── defaultの世界宣言：線の世界 ──
+ * tokensは線(--border-card)と影(--shadow-card)の両方を中立に定義するが、
+ * どちらの世界に立つかはスキンが宣言する（yuki=線 / nostalgia=影 / standard-01=ペア切替）。
+ * defaultは見出しがしっぽり明朝＝classic系のため、standard-01で確立した
+ * 「classic=線、modern/soft=影」の思想に従い線の世界を採る（スキン推奨設定.md 宿題1解決）。
+ * hoverの持ち上げ影(--shadow-lift)は知覚保証としてベースの値を残す。 */
+body.skin-default {
+	--shadow-card: none;
+}
